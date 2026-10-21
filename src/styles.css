@@ -1,0 +1,237 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * AIDAH design system — dreamy soft-feminine boutique.
+ * Palette (user-defined): blush #F4DDE3, rose #D99BAA, ivory #FFF9F4,
+ * cream #F7EFE7, gold #C8A56A, cocoa #755B57, charcoal #30272B.
+ * Every color used by components must come from the tokens below.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  /* Brand tokens */
+  --color-blush: var(--blush);
+  --color-rose: var(--rose);
+  --color-rose-deep: var(--rose-deep);
+  --color-ivory: var(--ivory);
+  --color-cream: var(--cream);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-cocoa: var(--cocoa);
+  --color-charcoal: var(--charcoal);
+}
+
+@theme {
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Jost", "Segoe UI", sans-serif;
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.985 0.009 62.6);
+  --foreground: oklch(0.284 0.015 349.5);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.284 0.015 349.5);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.284 0.015 349.5);
+  --primary: oklch(0.284 0.015 349.5);
+  --primary-foreground: oklch(0.985 0.009 62.6);
+  --secondary: oklch(0.918 0.026 360);
+  --secondary-foreground: oklch(0.284 0.015 349.5);
+  --muted: oklch(0.956 0.014 67.7);
+  --muted-foreground: oklch(0.496 0.035 28.5);
+  --accent: oklch(0.918 0.026 360);
+  --accent-foreground: oklch(0.284 0.015 349.5);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0.009 62.6);
+  --border: oklch(0.9 0.022 15);
+  --input: oklch(0.9 0.022 15);
+  --ring: oklch(0.74 0.087 79.8);
+  /* Brand */
+  --blush: oklch(0.918 0.026 360);
+  --rose: oklch(0.753 0.076 3.1);
+  --rose-deep: oklch(0.62 0.09 3);
+  --ivory: oklch(0.985 0.009 62.6);
+  --cream: oklch(0.956 0.014 67.7);
+  --gold: oklch(0.74 0.087 79.8);
+  --gold-soft: oklch(0.88 0.055 85);
+  --cocoa: oklch(0.496 0.035 28.5);
+  --charcoal: oklch(0.284 0.015 349.5);
+}
+
+.dark {
+  --background: oklch(0.284 0.015 349.5);
+  --foreground: oklch(0.985 0.009 62.6);
+  --card: oklch(0.33 0.02 349.5);
+  --card-foreground: oklch(0.985 0.009 62.6);
+  --popover: oklch(0.33 0.02 349.5);
+  --popover-foreground: oklch(0.985 0.009 62.6);
+  --primary: oklch(0.985 0.009 62.6);
+  --primary-foreground: oklch(0.284 0.015 349.5);
+  --secondary: oklch(0.4 0.03 350);
+  --secondary-foreground: oklch(0.985 0.009 62.6);
+  --muted: oklch(0.4 0.03 350);
+  --muted-foreground: oklch(0.75 0.03 30);
+  --accent: oklch(0.4 0.03 350);
+  --accent-foreground: oklch(0.985 0.009 62.6);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0.009 62.6);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.74 0.087 79.8);
+  --blush: oklch(0.4 0.03 350);
+  --rose: oklch(0.753 0.076 3.1);
+  --rose-deep: oklch(0.7 0.09 3);
+  --ivory: oklch(0.985 0.009 62.6);
+  --cream: oklch(0.4 0.03 350);
+  --gold: oklch(0.74 0.087 79.8);
+  --gold-soft: oklch(0.6 0.06 80);
+  --cocoa: oklch(0.75 0.03 30);
+  --charcoal: oklch(0.985 0.009 62.6);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+  }
+
+  ::selection {
+    background: var(--color-blush);
+    color: var(--color-charcoal);
+  }
+}
+
+/* ---- Editorial type helpers ---- */
+@utility eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+@utility display-1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  line-height: 1.04;
+  font-weight: 500;
+}
+
+@utility display-2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.1;
+  font-weight: 500;
+}
+
+@utility hairline {
+  border-color: color-mix(in oklab, var(--color-gold) 35%, transparent);
+}
+
+/* ---- Motion ---- */
+@keyframes aidah-fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes aidah-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(4deg); }
+}
+
+@keyframes aidah-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(24px, -30px) scale(1.06); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@utility animate-fade-up {
+  animation: aidah-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility animate-float {
+  animation: aidah-float 7s ease-in-out infinite;
+}
+
+@utility animate-drift {
+  animation: aidah-drift 18s ease-in-out infinite;
+}
+
+/* Scroll reveal — toggled by the <Reveal /> component */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s ease, transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Soft petals / blobs used as decorative accents */
+@utility petal {
+  border-radius: 60% 40% 55% 45% / 55% 45% 60% 40%;
+  filter: blur(0.5px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .animate-float, .animate-drift, .animate-fade-up {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
