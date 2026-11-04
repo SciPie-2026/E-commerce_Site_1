@@ -163,7 +163,9 @@ export function useRazorpay({ onSuccess, onFailure }: UseRazorpayOptions) {
               if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.message) {
                 errorMsg = parsed.map((p: any) => p.message).join(". ");
               }
-            } catch {}
+            } catch {
+              // Non-JSON error message string, keep original errorMsg
+            }
             toast.error(errorMsg);
             onFailure?.(errorMsg);
           } finally {
@@ -188,7 +190,9 @@ export function useRazorpay({ onSuccess, onFailure }: UseRazorpayOptions) {
         if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.message) {
           errorMsg = parsed.map((p: any) => p.message).join(". ");
         }
-      } catch {}
+      } catch {
+        // Non-JSON error message string, keep original errorMsg
+      }
       toast.error(errorMsg);
       onFailure?.(errorMsg);
     }

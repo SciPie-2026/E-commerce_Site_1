@@ -2,7 +2,7 @@ interface RateLimitEntry {
   timestamps: number[];
 }
 
-class SlidingWindowRateLimiter {
+export class SlidingWindowRateLimiter {
   private store: Map<string, RateLimitEntry> = new Map();
   private maxRequests: number;
   private windowMs: number;
@@ -48,6 +48,10 @@ class SlidingWindowRateLimiter {
     };
   }
 
+  public reset(key: string): void {
+    this.store.delete(key);
+  }
+
   private cleanup(): void {
     const now = Date.now();
     const windowStart = now - this.windowMs;
@@ -60,8 +64,23 @@ class SlidingWindowRateLimiter {
   }
 }
 
-// 5 attempts per 15 minutes for authentication routes
+// 5 attempts per 15 minutes for customer/admin login & registration
 export const authRateLimiter = new SlidingWindowRateLimiter(5, 15 * 60 * 1000);
+
+// 3 attempts per 15 minutes for password resets
+export const resetRateLimiter = new SlidingWindowRateLimiter(3, 15 * 60 * 1000);
+
+// 15 coupon code attempts per 5 minutes to prevent promo code enumeration
+export const couponRateLimiter = new SlidingWindowRateLimiter(15, 5 * 60 * 1000);
+
+// 10 order placements per 10 minutes to prevent checkout spam / stock hoarding
+export const checkoutRateLimiter = new SlidingWindowRateLimiter(10, 10 * 60 * 1000);
+
+// 10 payment verification attempts per 5 minutes to prevent replay / brute force
+export const paymentVerifyRateLimiter = new SlidingWindowRateLimiter(10, 5 * 60 * 1000);
+
+// 60 requests per minute for privileged admin dashboard actions
+export const adminRateLimiter = new SlidingWindowRateLimiter(60, 60 * 1000);
 
 // 100 requests per minute for standard API endpoints
 export const apiRateLimiter = new SlidingWindowRateLimiter(100, 60 * 1000);
@@ -71,9 +90,9 @@ export const apiRateLimiter = new SlidingWindowRateLimiter(100, 60 * 1000);
  */
 export function getClientIp(headers: Headers): string {
   return (
-    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    headers.get("x-real-ip") ||
     headers.get("cf-connecting-ip") ||
+    headers.get("x-real-ip") ||
+    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     "127.0.0.1"
   );
 }

@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowRight, Lock, Mail, Eye, EyeOff, ShieldAlert, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/admin/login")({
 });
 
 function AdminLoginPage() {
-  const { login, user } = useAuth();
+  const { login, logout, user } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -24,9 +24,11 @@ function AdminLoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  if (user?.role === "ADMIN") {
-    navigate({ to: "/admin" });
-  }
+  useEffect(() => {
+    if (user?.role === "ADMIN") {
+      navigate({ to: "/admin" });
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,13 +36,18 @@ function AdminLoginPage() {
     setIsSubmitting(true);
 
     try {
-      await login({
+      const loggedInUser = await login({
         email,
         password,
         rememberMe: true,
       });
 
-      // Verification of role happens right after login
+      if (loggedInUser.role !== "ADMIN") {
+        await logout();
+        setErrorMsg("Access Denied: Administrative privileges required.");
+        return;
+      }
+
       toast.success("Welcome, Atelier Administrator.");
       navigate({ to: "/admin" });
     } catch (err: any) {

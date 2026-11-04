@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { validatePasswordPolicy } from "@/lib/auth/password";
+import { sanitizeRedirectUrl } from "@/lib/utils";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -51,7 +52,7 @@ function RegisterPage() {
 
   useEffect(() => {
     if (user) {
-      const destination = redirect || "/account";
+      const destination = sanitizeRedirectUrl(redirect, "/account");
       window.location.href = destination;
     }
   }, [user, redirect]);
@@ -94,7 +95,7 @@ function RegisterPage() {
         acceptTerms,
       });
       toast.success("Welcome to the AIDAH Atelier family!");
-      const destination = redirect || "/account";
+      const destination = sanitizeRedirectUrl(redirect, "/account");
       window.location.href = destination;
     } catch (err: any) {
       setErrorMsg(err.message || "Failed to create account. Please try again.");

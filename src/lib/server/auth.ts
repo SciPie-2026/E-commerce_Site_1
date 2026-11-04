@@ -16,7 +16,7 @@ import {
 } from "../auth/jwt";
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from "../auth/cookies";
 import { generateSecureToken, hashToken } from "../auth/crypto";
-import { authRateLimiter } from "../auth/rate-limiter";
+import { authRateLimiter, resetRateLimiter } from "../auth/rate-limiter";
 import {
   RegisterInputSchema,
   LoginInputSchema,
@@ -127,12 +127,19 @@ export const loginFn = createServerFn({ method: "POST" })
   .validator((data: unknown) => LoginInputSchema.parse(data))
   .handler(async ({ data }) => {
     const ip = getRequestIP() || "127.0.0.1";
-    const limiter = authRateLimiter.check(`auth_${ip}`);
-    if (!limiter.allowed) {
-      throw new Error(`Too many login attempts. Please wait ${limiter.resetInSeconds} seconds.`);
+    const ipLimiter = authRateLimiter.check(`auth_ip_${ip}`);
+    if (!ipLimiter.allowed) {
+      throw new Error(`Too many login attempts. Please wait ${ipLimiter.resetInSeconds} seconds.`);
     }
 
     const email = data.email.toLowerCase().trim();
+    const acctLimiter = authRateLimiter.check(`auth_acct_${email}`);
+    if (!acctLimiter.allowed) {
+      throw new Error(
+        `Too many login attempts for this account. Please wait ${acctLimiter.resetInSeconds} seconds.`,
+      );
+    }
+
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
@@ -286,12 +293,17 @@ export const forgotPasswordFn = createServerFn({ method: "POST" })
   .validator((data: unknown) => ForgotPasswordInputSchema.parse(data))
   .handler(async ({ data }) => {
     const ip = getRequestIP() || "127.0.0.1";
-    const limiter = authRateLimiter.check(`forgot_${ip}`);
+    const limiter = resetRateLimiter.check(`forgot_ip_${ip}`);
     if (!limiter.allowed) {
       throw new Error(`Too many requests. Please wait ${limiter.resetInSeconds} seconds.`);
     }
 
     const email = data.email.toLowerCase().trim();
+    const acctLimiter = resetRateLimiter.check(`forgot_acct_${email}`);
+    if (!acctLimiter.allowed) {
+      throw new Error(`Too many requests for this account. Please wait ${acctLimiter.resetInSeconds} seconds.`);
+    }
+
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (user) {
@@ -307,11 +319,14 @@ export const forgotPasswordFn = createServerFn({ method: "POST" })
         },
       });
 
-      // In production, send email. In development, return simulated link
+      // Never return devResetToken unless explicitly enabled in local development mode
+      const allowDevToken =
+        process.env.NODE_ENV === "development" && process.env.ALLOW_DEV_RESET_TOKEN === "true";
+
       return {
         success: true,
         message: "If an account exists with this email, a reset link has been dispatched.",
-        devResetToken: process.env.NODE_ENV !== "production" ? rawToken : undefined,
+        devResetToken: allowDevToken ? rawToken : undefined,
       };
     }
 
@@ -328,7 +343,7 @@ export const resetPasswordFn = createServerFn({ method: "POST" })
   .validator((data: unknown) => ResetPasswordInputSchema.parse(data))
   .handler(async ({ data }) => {
     const ip = getRequestIP() || "127.0.0.1";
-    const limiter = authRateLimiter.check(`reset_${ip}`);
+    const limiter = resetRateLimiter.check(`reset_${ip}`);
     if (!limiter.allowed) {
       throw new Error(`Too many attempts. Please wait ${limiter.resetInSeconds} seconds.`);
     }

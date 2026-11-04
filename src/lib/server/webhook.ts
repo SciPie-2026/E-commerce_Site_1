@@ -55,17 +55,48 @@ export async function processRazorpayWebhook(rawBody: string, signature: string)
         where: {
           OR: [{ paymentGatewayOrderId: payment.order_id }, { id: payment.order_id }],
         },
+        include: { orderItems: true },
       });
 
+      // Idempotent: Only process if order has not already been marked PAID
       if (order && order.paymentStatus !== "PAID") {
-        await prisma.order.update({
-          where: { id: order.id },
-          data: {
-            paymentStatus: "PAID",
-            status: "CONFIRMED",
-            paymentGatewayPaymentId: payment.id,
-          },
-        });
+        let appliedPromoCode: string | null = null;
+        if (order.notes) {
+          try {
+            const parsed = JSON.parse(order.notes);
+            if (parsed?.promoCode) appliedPromoCode = parsed.promoCode;
+          } catch {
+            // Not JSON
+          }
+        }
+
+        await prisma.$transaction([
+          prisma.order.update({
+            where: { id: order.id },
+            data: {
+              paymentStatus: "PAID",
+              status: "CONFIRMED",
+              paymentGatewayPaymentId: payment.id,
+            },
+          }),
+          // Decrement inventory safely
+          ...order.orderItems
+            .filter((item) => item.productId)
+            .map((item) =>
+              prisma.product.updateMany({
+                where: { id: item.productId!, inventory: { gte: item.quantity } },
+                data: { inventory: { decrement: item.quantity } },
+              }),
+            ),
+          ...(appliedPromoCode
+            ? [
+                prisma.coupon.updateMany({
+                  where: { code: appliedPromoCode },
+                  data: { usedCount: { increment: 1 } },
+                }),
+              ]
+            : []),
+        ]);
       }
       break;
     }
@@ -81,19 +112,22 @@ export async function processRazorpayWebhook(rawBody: string, signature: string)
         include: { orderItems: true },
       });
 
-      if (order && order.paymentStatus !== "PAID") {
+      if (order) {
+        const wasPaid = order.paymentStatus === "PAID";
         await prisma.order.update({
           where: { id: order.id },
           data: { paymentStatus: "FAILED" },
         });
 
-        // Restore inventory
-        for (const item of order.orderItems) {
-          if (item.productId) {
-            await prisma.product.update({
-              where: { id: item.productId },
-              data: { inventory: { increment: item.quantity } },
-            });
+        // Only restore inventory if stock was previously decremented (i.e. order was marked PAID)
+        if (wasPaid) {
+          for (const item of order.orderItems) {
+            if (item.productId) {
+              await prisma.product.update({
+                where: { id: item.productId },
+                data: { inventory: { increment: item.quantity } },
+              });
+            }
           }
         }
       }
@@ -106,16 +140,28 @@ export async function processRazorpayWebhook(rawBody: string, signature: string)
 
       const order = await prisma.order.findFirst({
         where: { paymentGatewayPaymentId: refund.payment_id },
+        include: { orderItems: true },
       });
 
-      if (order) {
-        await prisma.order.update({
-          where: { id: order.id },
-          data: {
-            status: "REFUNDED",
-            paymentStatus: "REFUNDED",
-          },
-        });
+      if (order && order.paymentStatus !== "REFUNDED") {
+        await prisma.$transaction([
+          prisma.order.update({
+            where: { id: order.id },
+            data: {
+              status: "REFUNDED",
+              paymentStatus: "REFUNDED",
+            },
+          }),
+          // Restore inventory upon verified refund
+          ...order.orderItems
+            .filter((item) => item.productId)
+            .map((item) =>
+              prisma.product.update({
+                where: { id: item.productId! },
+                data: { inventory: { increment: item.quantity } },
+              }),
+            ),
+        ]);
       }
       break;
     }

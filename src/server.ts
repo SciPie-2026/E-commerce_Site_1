@@ -47,11 +47,44 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const url = new URL(request.url);
+
+      // Dedicated Webhook Handler for Payment Gateway
+      if (url.pathname === "/api/webhook/razorpay" || url.pathname === "/api/webhooks/razorpay") {
+        if (request.method !== "POST") {
+          return new Response(JSON.stringify({ error: "Method not allowed" }), {
+            status: 405,
+            headers: { "content-type": "application/json" },
+          });
+        }
+        const signature = request.headers.get("x-razorpay-signature") || "";
+        if (!signature) {
+          return new Response(JSON.stringify({ error: "Missing webhook signature" }), {
+            status: 400,
+            headers: { "content-type": "application/json" },
+          });
+        }
+        const rawBody = await request.text();
+        const { processRazorpayWebhook } = await import("./lib/server/webhook");
+        const result = await processRazorpayWebhook(rawBody, signature);
+        return new Response(JSON.stringify(result), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        });
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      const url = new URL(request.url);
+      if (url.pathname.startsWith("/api/")) {
+        return new Response(JSON.stringify({ error: error?.message || "Internal server error" }), {
+          status: 400,
+          headers: { "content-type": "application/json" },
+        });
+      }
       return new Response(renderErrorPage(), {
         status: 500,
         headers: { "content-type": "text/html; charset=utf-8" },

@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-r
 import { useState, useEffect } from "react";
 import { ArrowRight, Lock, Mail, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import { sanitizeRedirectUrl } from "@/lib/utils";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -38,7 +39,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (user) {
-      const destination = redirect || "/account";
+      const destination = sanitizeRedirectUrl(redirect, "/account");
       window.location.href = destination;
     }
   }, [user, redirect]);
@@ -55,7 +56,7 @@ function LoginPage() {
         rememberMe,
       });
       toast.success("Welcome back to AIDAH.");
-      const destination = redirect || "/account";
+      const destination = sanitizeRedirectUrl(redirect, "/account");
       window.location.href = destination;
     } catch (err: any) {
       setErrorMsg(err.message || "Invalid credentials. Please verify your email and password.");

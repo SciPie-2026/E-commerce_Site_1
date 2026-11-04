@@ -13,8 +13,8 @@ interface AuthContextType {
   user: AuthUser | null;
   isLoading: boolean;
   isAdmin: boolean;
-  login: (data: Parameters<typeof loginFn>[0]["data"]) => Promise<void>;
-  register: (data: Parameters<typeof registerFn>[0]["data"]) => Promise<void>;
+  login: (data: Parameters<typeof loginFn>[0]["data"]) => Promise<AuthUser>;
+  register: (data: Parameters<typeof registerFn>[0]["data"]) => Promise<AuthUser>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -40,14 +40,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refreshUser();
   }, []);
 
-  const login = async (data: Parameters<typeof loginFn>[0]["data"]) => {
+  const login = async (data: Parameters<typeof loginFn>[0]["data"]): Promise<AuthUser> => {
     const res = await loginFn({ data });
     setUser(res.user);
+    return res.user;
   };
 
-  const register = async (data: Parameters<typeof registerFn>[0]["data"]) => {
+  const register = async (data: Parameters<typeof registerFn>[0]["data"]): Promise<AuthUser> => {
     const res = await registerFn({ data });
     setUser(res.user);
+    return res.user;
   };
 
   const logout = async () => {

@@ -3,6 +3,7 @@ import { getRequestIP } from "@tanstack/react-start/server";
 import { prisma } from "../db";
 import { getCurrentUserFn } from "./auth";
 import { ProductAdminSchema, CouponAdminSchema } from "../auth/validators";
+import { adminRateLimiter } from "../auth/rate-limiter";
 import { z } from "zod";
 
 /**
@@ -10,8 +11,13 @@ import { z } from "zod";
  * Rejects any non-ADMIN user and logs failed access attempts.
  */
 async function requireAdmin() {
-  const auth = await getCurrentUserFn();
   const ip = getRequestIP() || "127.0.0.1";
+  const limiter = adminRateLimiter.check(`admin_${ip}`);
+  if (!limiter.allowed) {
+    throw new Error(`Too many administrative requests. Please wait ${limiter.resetInSeconds} seconds.`);
+  }
+
+  const auth = await getCurrentUserFn();
 
   if (!auth.user || auth.user.role !== "ADMIN") {
     // Log security violation if user was logged in but not admin
@@ -28,6 +34,8 @@ async function requireAdmin() {
           ipAddress: ip,
         },
       });
+    } else {
+      console.warn(`[SECURITY] Unauthenticated admin access attempt from IP: ${ip}`);
     }
     throw new Error("Access Denied: Administrative privileges required.");
   }

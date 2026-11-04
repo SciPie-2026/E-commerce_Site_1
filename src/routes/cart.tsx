@@ -43,7 +43,8 @@ function CartPage() {
   const { lines, subtotal, remove, setQty, clear } = useCart();
   const { user, login, register } = useAuth();
 
-  const getLineKey = (l: any) => l.key ?? l.id ?? `${l.productId ?? ""}|${l.size ?? ""}|${l.color ?? ""}`;
+  const getLineKey = (l: any) =>
+    l.key ?? l.id ?? `${l.productId ?? ""}|${l.size ?? ""}|${l.color ?? ""}`;
   const getLineSlug = (l: any) => l.slug ?? l.product?.slug ?? "";
   const getLineName = (l: any) => l.name ?? l.product?.name ?? "Designer Piece";
   const getLineImage = (l: any) => l.image ?? l.product?.images?.[0] ?? "";
@@ -183,7 +184,9 @@ function CartPage() {
       setShowAuthPromptModal(false);
       setShowCheckoutModal(true);
     } catch (err: any) {
-      setQuickLoginError(err.message || "Invalid credentials. Please verify your email and password.");
+      setQuickLoginError(
+        err.message || "Invalid credentials. Please verify your email and password.",
+      );
     } finally {
       setQuickLoginLoading(false);
     }
@@ -202,7 +205,9 @@ function CartPage() {
       return;
     }
     if (!quickRegPassword || quickRegPassword.length < 8) {
-      setQuickRegError("Password must be at least 8 characters with upper, lower, number & symbol.");
+      setQuickRegError(
+        "Password must be at least 8 characters with upper, lower, number & symbol.",
+      );
       return;
     }
 
@@ -534,9 +539,7 @@ function CartPage() {
             <div className="flex items-center justify-between border-b border-border pb-3">
               <div>
                 <p className="eyebrow text-gold">Atelier Checkout</p>
-                <h3 className="font-serif text-2xl text-foreground">
-                  Complete Your Order
-                </h3>
+                <h3 className="font-serif text-2xl text-foreground">Complete Your Order</h3>
               </div>
               <button
                 onClick={() => setShowAuthPromptModal(false)}
@@ -574,7 +577,10 @@ function CartPage() {
 
             {authTab === "login" ? (
               /* Quick Sign In Form */
-              <form onSubmit={handleQuickLogin} className="space-y-3.5 rounded-2xl border border-border/60 bg-background/50 p-4">
+              <form
+                onSubmit={handleQuickLogin}
+                className="space-y-3.5 rounded-2xl border border-border/60 bg-background/50 p-4"
+              >
                 <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gold">
                   <LogIn className="h-4 w-4" />
                   <span>Sign In with Existing Account</span>
@@ -630,7 +636,11 @@ function CartPage() {
                       onClick={() => setShowQuickPassword(!showQuickPassword)}
                       className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground"
                     >
-                      {showQuickPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                      {showQuickPassword ? (
+                        <EyeOff className="h-3.5 w-3.5" />
+                      ) : (
+                        <Eye className="h-3.5 w-3.5" />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -646,7 +656,10 @@ function CartPage() {
               </form>
             ) : (
               /* Quick Account Creation Form */
-              <form onSubmit={handleQuickRegister} className="space-y-3 rounded-2xl border border-border/60 bg-background/50 p-4">
+              <form
+                onSubmit={handleQuickRegister}
+                className="space-y-3 rounded-2xl border border-border/60 bg-background/50 p-4"
+              >
                 <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gold">
                   <UserPlus className="h-4 w-4" />
                   <span>Create Atelier Account</span>
@@ -711,7 +724,11 @@ function CartPage() {
                       onClick={() => setShowQuickRegPassword(!showQuickRegPassword)}
                       className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground"
                     >
-                      {showQuickRegPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                      {showQuickRegPassword ? (
+                        <EyeOff className="h-3.5 w-3.5" />
+                      ) : (
+                        <Eye className="h-3.5 w-3.5" />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -729,7 +746,9 @@ function CartPage() {
 
             <div className="relative flex py-1 items-center">
               <div className="flex-grow border-t border-border"></div>
-              <span className="flex-shrink mx-3 text-[0.7rem] uppercase tracking-wider text-muted-foreground font-medium">or</span>
+              <span className="flex-shrink mx-3 text-[0.7rem] uppercase tracking-wider text-muted-foreground font-medium">
+                or
+              </span>
               <div className="flex-grow border-t border-border"></div>
             </div>
 
