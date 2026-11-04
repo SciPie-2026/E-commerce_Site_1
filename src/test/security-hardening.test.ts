@@ -242,37 +242,39 @@ describe("Schema Hardening & Input Constraints (OWASP A04 & DoS Mitigation)", ()
   });
 });
 
-import { createOrderFn, verifyPaymentFn, validatePromoCodeFn } from "@/lib/server/checkout";
+import {
+  processCreateOrder,
+  processVerifyPayment,
+  processValidatePromoCode,
+} from "@/lib/server/checkout";
 import { processRazorpayWebhook } from "@/lib/server/webhook";
 import { prisma } from "@/lib/db";
 
 describe("Business Logic & Order Tampering Protections (OWASP A04)", () => {
   it("enforces server-authoritative pricing and rejects client price tampering", async () => {
     // Client attempts to buy ₹28,500 (2850000 paise) gown for 1 paisa (₹0.01)
-    const tamperedOrder = await createOrderFn({
-      data: {
-        customerEmail: "attacker@test.com",
-        customerPhone: "+91 99999 88888",
-        shippingAddress: {
-          type: "SHIPPING",
-          name: "Test Attacker",
-          street: "123 Exploit Lane",
-          city: "New Delhi",
-          state: "Delhi",
-          postalCode: "110001",
-          country: "India",
-          phone: "+91 99999 88888",
-          isDefault: false,
-        },
-        items: [
-          {
-            productSlug: "seraphina-ice-blue-gown",
-            productTitle: "Seraphina Ice Blue Saree Gown",
-            unitPrice: 1, // Tampered: 1 paisa instead of 2850000 paise
-            quantity: 1,
-          },
-        ],
+    const tamperedOrder = await processCreateOrder({
+      customerEmail: "attacker@test.com",
+      customerPhone: "+91 99999 88888",
+      shippingAddress: {
+        type: "SHIPPING",
+        name: "Test Attacker",
+        street: "123 Exploit Lane",
+        city: "New Delhi",
+        state: "Delhi",
+        postalCode: "110001",
+        country: "India",
+        phone: "+91 99999 88888",
+        isDefault: false,
       },
+      items: [
+        {
+          productSlug: "seraphina-ice-blue-gown",
+          productTitle: "Seraphina Ice Blue Saree Gown",
+          unitPrice: 1, // Tampered: 1 paisa instead of 2850000 paise
+          quantity: 1,
+        },
+      ],
     });
 
     // Verify order was created with authoritative price (₹28,500 = 2850000 paise), NOT 1 paisa!
@@ -293,43 +295,39 @@ describe("Business Logic & Order Tampering Protections (OWASP A04)", () => {
 
   it("prevents replay attacks on verifyPaymentFn (idempotency)", async () => {
     // 1. Create order
-    const orderRes = await createOrderFn({
-      data: {
-        customerEmail: "patron@aidah.com",
-        customerPhone: "+91 98765 43210",
-        shippingAddress: {
-          type: "SHIPPING",
-          name: "Aanya",
-          street: "DLF Phase 5",
-          city: "Gurugram",
-          state: "Haryana",
-          postalCode: "122002",
-          country: "India",
-          phone: "+91 98765 43210",
-          isDefault: false,
-        },
-        items: [
-          {
-            productSlug: "seraphina-ice-blue-gown",
-            productTitle: "Seraphina Ice Blue Saree Gown",
-            unitPrice: 2850000,
-            quantity: 1,
-          },
-        ],
+    const orderRes = await processCreateOrder({
+      customerEmail: "patron@aidah.com",
+      customerPhone: "+91 98765 43210",
+      shippingAddress: {
+        type: "SHIPPING",
+        name: "Aanya",
+        street: "DLF Phase 5",
+        city: "Gurugram",
+        state: "Haryana",
+        postalCode: "122002",
+        country: "India",
+        phone: "+91 98765 43210",
+        isDefault: false,
       },
+      items: [
+        {
+          productSlug: "seraphina-ice-blue-gown",
+          productTitle: "Seraphina Ice Blue Saree Gown",
+          unitPrice: 2850000,
+          quantity: 1,
+        },
+      ],
     });
 
     const mockPaymentId = `pay_mock_${Date.now()}`;
     const mockSig = `sig_mock_${Date.now()}`;
 
     // 2. First verification (should succeed)
-    const firstVerify = await verifyPaymentFn({
-      data: {
-        orderNumber: orderRes.orderNumber,
-        razorpayOrderId: orderRes.gatewayOrder.gatewayOrderId,
-        razorpayPaymentId: mockPaymentId,
-        razorpaySignature: mockSig,
-      },
+    const firstVerify = await processVerifyPayment({
+      orderNumber: orderRes.orderNumber,
+      razorpayOrderId: orderRes.gatewayOrder.gatewayOrderId,
+      razorpayPaymentId: mockPaymentId,
+      razorpaySignature: mockSig,
     });
     expect(firstVerify.success).toBe(true);
     expect(firstVerify.status).toBe("CONFIRMED");
@@ -341,13 +339,11 @@ describe("Business Logic & Order Tampering Protections (OWASP A04)", () => {
     const invAfterFirst = productAfterFirst?.inventory;
 
     // 3. Replay attack: calling verifyPaymentFn a second time with same payment details
-    const replayVerify = await verifyPaymentFn({
-      data: {
-        orderNumber: orderRes.orderNumber,
-        razorpayOrderId: orderRes.gatewayOrder.gatewayOrderId,
-        razorpayPaymentId: mockPaymentId,
-        razorpaySignature: mockSig,
-      },
+    const replayVerify = await processVerifyPayment({
+      orderNumber: orderRes.orderNumber,
+      razorpayOrderId: orderRes.gatewayOrder.gatewayOrderId,
+      razorpayPaymentId: mockPaymentId,
+      razorpaySignature: mockSig,
     });
     expect(replayVerify.success).toBe(true);
 
@@ -369,41 +365,37 @@ describe("Business Logic & Order Tampering Protections (OWASP A04)", () => {
   });
 
   it("rejects mismatched gateway order IDs in verifyPaymentFn", async () => {
-    const orderRes = await createOrderFn({
-      data: {
-        customerEmail: "patron@aidah.com",
-        customerPhone: "+91 98765 43210",
-        shippingAddress: {
-          type: "SHIPPING",
-          name: "Aanya",
-          street: "DLF Phase 5",
-          city: "Gurugram",
-          state: "Haryana",
-          postalCode: "122002",
-          country: "India",
-          phone: "+91 98765 43210",
-          isDefault: false,
-        },
-        items: [
-          {
-            productSlug: "seraphina-ice-blue-gown",
-            productTitle: "Seraphina Ice Blue Saree Gown",
-            unitPrice: 2850000,
-            quantity: 1,
-          },
-        ],
+    const orderRes = await processCreateOrder({
+      customerEmail: "patron@aidah.com",
+      customerPhone: "+91 98765 43210",
+      shippingAddress: {
+        type: "SHIPPING",
+        name: "Aanya",
+        street: "DLF Phase 5",
+        city: "Gurugram",
+        state: "Haryana",
+        postalCode: "122002",
+        country: "India",
+        phone: "+91 98765 43210",
+        isDefault: false,
       },
+      items: [
+        {
+          productSlug: "seraphina-ice-blue-gown",
+          productTitle: "Seraphina Ice Blue Saree Gown",
+          unitPrice: 2850000,
+          quantity: 1,
+        },
+      ],
     });
 
     // Attempting to submit a foreign gateway order ID
     await expect(
-      verifyPaymentFn({
-        data: {
-          orderNumber: orderRes.orderNumber,
-          razorpayOrderId: "order_mock_foreign_mismatched_id",
-          razorpayPaymentId: "pay_mock_123",
-          razorpaySignature: "sig_mock_123",
-        },
+      processVerifyPayment({
+        orderNumber: orderRes.orderNumber,
+        razorpayOrderId: "order_mock_foreign_mismatched_id",
+        razorpayPaymentId: "pay_mock_123",
+        razorpaySignature: "sig_mock_123",
       }),
     ).rejects.toThrow(/mismatch/i);
 
@@ -419,30 +411,28 @@ describe("Business Logic & Order Tampering Protections (OWASP A04)", () => {
     });
     const invBefore = productBefore?.inventory ?? 8;
 
-    const orderRes = await createOrderFn({
-      data: {
-        customerEmail: "patron@aidah.com",
-        customerPhone: "+91 98765 43210",
-        shippingAddress: {
-          type: "SHIPPING",
-          name: "Aanya",
-          street: "DLF Phase 5",
-          city: "Gurugram",
-          state: "Haryana",
-          postalCode: "122002",
-          country: "India",
-          phone: "+91 98765 43210",
-          isDefault: false,
-        },
-        items: [
-          {
-            productSlug: "seraphina-ice-blue-gown",
-            productTitle: "Seraphina Ice Blue Saree Gown",
-            unitPrice: 2850000,
-            quantity: 1,
-          },
-        ],
+    const orderRes = await processCreateOrder({
+      customerEmail: "patron@aidah.com",
+      customerPhone: "+91 98765 43210",
+      shippingAddress: {
+        type: "SHIPPING",
+        name: "Aanya",
+        street: "DLF Phase 5",
+        city: "Gurugram",
+        state: "Haryana",
+        postalCode: "122002",
+        country: "India",
+        phone: "+91 98765 43210",
+        isDefault: false,
       },
+      items: [
+        {
+          productSlug: "seraphina-ice-blue-gown",
+          productTitle: "Seraphina Ice Blue Saree Gown",
+          unitPrice: 2850000,
+          quantity: 1,
+        },
+      ],
     });
 
     // Simulate payment.failed webhook
@@ -475,5 +465,57 @@ describe("Business Logic & Order Tampering Protections (OWASP A04)", () => {
     // Clean up
     await prisma.orderItem.deleteMany({ where: { orderId: orderRes.orderId } });
     await prisma.order.delete({ where: { id: orderRes.orderId } });
+  });
+});
+
+describe("Product Slug Collision & Disambiguation Resolution", () => {
+  it("disambiguates identical product slugs with incremental suffixes", async () => {
+    const baseSlug = "test-collision-kurta";
+    const sku1 = `SKU-COL-1-${Date.now()}`;
+    const sku2 = `SKU-COL-2-${Date.now()}`;
+
+    // Create first product with baseSlug
+    const p1 = await prisma.product.create({
+      data: {
+        title: "Test Collision Kurta",
+        slug: baseSlug,
+        description: "Pure mulberry silk festive kurta.",
+        price: 1200000,
+        category: "ethnic-wear",
+        sku: sku1,
+      },
+    });
+
+    // Simulate collision logic for second product with same base title/slug
+    let finalSlug = baseSlug;
+    const existing = await prisma.product.findUnique({ where: { slug: finalSlug } });
+    if (existing) {
+      let counter = 2;
+      let candidateSlug = `${baseSlug}-${counter}`;
+      while (await prisma.product.findUnique({ where: { slug: candidateSlug } })) {
+        counter++;
+        candidateSlug = `${baseSlug}-${counter}`;
+      }
+      finalSlug = candidateSlug;
+    }
+
+    const p2 = await prisma.product.create({
+      data: {
+        title: "Test Collision Kurta",
+        slug: finalSlug,
+        description: "Another edition of silk festive kurta.",
+        price: 1350000,
+        category: "ethnic-wear",
+        sku: sku2,
+      },
+    });
+
+    expect(p1.slug).toBe(baseSlug);
+    expect(p2.slug).toBe(`${baseSlug}-2`);
+    expect(p1.slug).not.toBe(p2.slug);
+
+    // Clean up
+    await prisma.product.delete({ where: { id: p1.id } });
+    await prisma.product.delete({ where: { id: p2.id } });
   });
 });

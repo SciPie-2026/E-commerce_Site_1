@@ -301,7 +301,9 @@ export const forgotPasswordFn = createServerFn({ method: "POST" })
     const email = data.email.toLowerCase().trim();
     const acctLimiter = resetRateLimiter.check(`forgot_acct_${email}`);
     if (!acctLimiter.allowed) {
-      throw new Error(`Too many requests for this account. Please wait ${acctLimiter.resetInSeconds} seconds.`);
+      throw new Error(
+        `Too many requests for this account. Please wait ${acctLimiter.resetInSeconds} seconds.`,
+      );
     }
 
     const user = await prisma.user.findUnique({ where: { email } });

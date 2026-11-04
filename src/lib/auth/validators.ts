@@ -26,7 +26,10 @@ export const RegisterInputSchema = z
 export const LoginInputSchema = z
   .object({
     email: z.string().trim().email("Please enter a valid email address").max(100).toLowerCase(),
-    password: z.string().min(1, "Password is required").max(72, "Password must not exceed 72 characters"),
+    password: z
+      .string()
+      .min(1, "Password is required")
+      .max(72, "Password must not exceed 72 characters"),
     rememberMe: z.boolean().optional().default(false),
   })
   .strict();
@@ -96,7 +99,11 @@ export const AddressInputSchema = z
     city: z.string().trim().min(2, "City is required").max(80),
     state: z.string().trim().min(2, "State / Province is required").max(80),
     postalCode: z.string().trim().min(3, "Postal code is required").max(12),
-    country: z.string().trim().default("India").refine((val) => val.length <= 50, "Country too long"),
+    country: z
+      .string()
+      .trim()
+      .default("India")
+      .refine((val) => val.length <= 50, "Country too long"),
     phone: z.string().trim().min(8, "Contact phone is required").max(15),
     isDefault: z.boolean().default(false),
   })
@@ -111,13 +118,20 @@ export const OrderItemInputSchema = z
     size: z.string().max(50).optional(),
     color: z.string().max(50).optional(),
     unitPrice: z.number().int().positive("Price must be positive").max(100000000), // Max ₹10,00,000
-    quantity: z.number().int().positive("Quantity must be at least 1").max(100, "Maximum 100 units per line item"),
+    quantity: z
+      .number()
+      .int()
+      .positive("Quantity must be at least 1")
+      .max(100, "Maximum 100 units per line item"),
   })
   .strict();
 
 export const CreateOrderInputSchema = z
   .object({
-    items: z.array(OrderItemInputSchema).min(1, "Order must contain at least one item").max(50, "Maximum 50 line items per order"),
+    items: z
+      .array(OrderItemInputSchema)
+      .min(1, "Order must contain at least one item")
+      .max(50, "Maximum 50 line items per order"),
     customerEmail: z.string().trim().email("Valid email required").max(100).toLowerCase(),
     customerPhone: z.string().trim().min(8, "Valid phone number required").max(15),
     shippingAddress: AddressInputSchema,
@@ -130,7 +144,12 @@ export const CreateOrderInputSchema = z
 export const ProductAdminSchema = z
   .object({
     title: z.string().trim().min(2, "Title is required").max(200),
-    slug: z.string().trim().min(2, "Slug is required").max(200).regex(/^[a-z0-9-]+$/, "Slug must contain only lowercase letters, numbers, and hyphens"),
+    slug: z
+      .string()
+      .trim()
+      .min(2, "Slug is required")
+      .max(200)
+      .regex(/^[a-z0-9-]+$/, "Slug must contain only lowercase letters, numbers, and hyphens"),
     description: z.string().trim().min(10, "Description must be at least 10 characters").max(5000),
     price: z.number().int().positive("Price in paise must be positive").max(100000000),
     compareAtPrice: z.number().int().positive().max(100000000).optional().nullable(),
@@ -178,7 +197,10 @@ export const CouponAdminSchema = z
       .min(3, "Code must be at least 3 characters")
       .max(30)
       .toUpperCase()
-      .regex(/^[A-Z0-9_-]+$/, "Coupon code must contain only letters, numbers, hyphens, and underscores"),
+      .regex(
+        /^[A-Z0-9_-]+$/,
+        "Coupon code must contain only letters, numbers, hyphens, and underscores",
+      ),
     discountType: z.enum(["PERCENTAGE", "FIXED"]),
     value: z.number().int().positive("Value must be positive").max(10000000),
     minOrderValue: z.number().int().min(0).max(100000000).default(0),

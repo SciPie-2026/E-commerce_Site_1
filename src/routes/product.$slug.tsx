@@ -23,7 +23,12 @@ import { ProductCard } from "@/components/site/product-card";
 
 export const Route = createFileRoute("/product/$slug")({
   loader: ({ params }) => {
-    const product = products.find((p) => p.slug === params.slug);
+    const product = products.find(
+      (p) =>
+        p.slug === params.slug ||
+        p.id === params.slug ||
+        p.sku?.toLowerCase() === params.slug.toLowerCase(),
+    );
     if (!product) {
       throw notFound();
     }

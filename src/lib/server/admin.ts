@@ -14,7 +14,9 @@ async function requireAdmin() {
   const ip = getRequestIP() || "127.0.0.1";
   const limiter = adminRateLimiter.check(`admin_${ip}`);
   if (!limiter.allowed) {
-    throw new Error(`Too many administrative requests. Please wait ${limiter.resetInSeconds} seconds.`);
+    throw new Error(
+      `Too many administrative requests. Please wait ${limiter.resetInSeconds} seconds.`,
+    );
   }
 
   const auth = await getCurrentUserFn();
@@ -148,8 +150,17 @@ export const createAdminProductFn = createServerFn({ method: "POST" })
     const admin = await requireAdmin();
     const ip = getRequestIP() || "127.0.0.1";
 
-    const existingSlug = await prisma.product.findUnique({ where: { slug: data.slug } });
-    if (existingSlug) throw new Error("A product with this slug already exists.");
+    let finalSlug = data.slug;
+    const existingSlug = await prisma.product.findUnique({ where: { slug: finalSlug } });
+    if (existingSlug) {
+      let counter = 2;
+      let candidateSlug = `${data.slug}-${counter}`;
+      while (await prisma.product.findUnique({ where: { slug: candidateSlug } })) {
+        counter++;
+        candidateSlug = `${data.slug}-${counter}`;
+      }
+      finalSlug = candidateSlug;
+    }
 
     const existingSku = await prisma.product.findUnique({ where: { sku: data.sku } });
     if (existingSku) throw new Error("A product with this SKU already exists.");
@@ -157,7 +168,7 @@ export const createAdminProductFn = createServerFn({ method: "POST" })
     const product = await prisma.product.create({
       data: {
         title: data.title,
-        slug: data.slug,
+        slug: finalSlug,
         description: data.description,
         price: data.price,
         compareAtPrice: data.compareAtPrice,
@@ -209,11 +220,20 @@ export const updateAdminProductFn = createServerFn({ method: "POST" })
 
     const { id, data: updateData } = data;
 
-    // Check slug collision
+    // Check slug collision & auto-disambiguate if needed
+    let finalSlug = updateData.slug;
     const existingSlug = await prisma.product.findFirst({
-      where: { slug: updateData.slug, NOT: { id } },
+      where: { slug: finalSlug, NOT: { id } },
     });
-    if (existingSlug) throw new Error("Another product already uses this slug.");
+    if (existingSlug) {
+      let counter = 2;
+      let candidateSlug = `${updateData.slug}-${counter}`;
+      while (await prisma.product.findFirst({ where: { slug: candidateSlug, NOT: { id } } })) {
+        counter++;
+        candidateSlug = `${updateData.slug}-${counter}`;
+      }
+      finalSlug = candidateSlug;
+    }
 
     // Update product & recreate variants
     await prisma.productVariant.deleteMany({ where: { productId: id } });
@@ -222,7 +242,7 @@ export const updateAdminProductFn = createServerFn({ method: "POST" })
       where: { id },
       data: {
         title: updateData.title,
-        slug: updateData.slug,
+        slug: finalSlug,
         description: updateData.description,
         price: updateData.price,
         compareAtPrice: updateData.compareAtPrice,

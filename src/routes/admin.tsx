@@ -145,11 +145,23 @@ function AdminDashboardPage() {
   const handleTitleChange = (val: string) => {
     setProdTitle(val);
     if (!editingProduct) {
-      const slug = val
+      const baseSlug = val
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)+/g, "");
-      setProdSlug(slug);
+
+      if (!baseSlug) {
+        setProdSlug("");
+        return;
+      }
+
+      let uniqueSlug = baseSlug;
+      let counter = 2;
+      while (products.some((p) => p.slug === uniqueSlug)) {
+        uniqueSlug = `${baseSlug}-${counter}`;
+        counter++;
+      }
+      setProdSlug(uniqueSlug);
     }
   };
 
