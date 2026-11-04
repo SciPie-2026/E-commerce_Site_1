@@ -1,0 +1,184 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                String      @id @default(uuid())
+  name              String
+  email             String      @unique
+  passwordHash      String
+  phone             String?
+  role              String      @default("CUSTOMER") // CUSTOMER, STAFF, ADMIN
+  isVerified        Boolean     @default(false)
+  resetToken        String?
+  resetTokenExpires DateTime?
+  addresses         Address[]
+  orders            Order[]
+  sessions          Session[]
+  auditLogs         AuditLog[]
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  @@index([email])
+}
+
+model Address {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type       String   @default("SHIPPING") // SHIPPING, BILLING
+  name       String
+  street     String
+  city       String
+  state      String
+  postalCode String
+  country    String   @default("India")
+  phone      String
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Product {
+  id             String           @id @default(uuid())
+  slug           String           @unique
+  title          String
+  description    String
+  price          Int              // In paise (e.g. 1500000 = ₹15,000)
+  compareAtPrice Int?             // In paise
+  category       String
+  tags           String           @default("[]") // JSON string array
+  images         String           @default("[]") // JSON string array
+  isPublished    Boolean          @default(true)
+  inventory      Int              @default(0)
+  sku            String           @unique
+  fabric         String?
+  occasion       String?
+  badge          String?          // e.g. "New", "Bestseller", "Limited Edition"
+  rating         Float            @default(5.0)
+  reviewCount    Int              @default(0)
+  variants       ProductVariant[]
+  orderItems     OrderItem[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([slug])
+  @@index([category])
+  @@index([isPublished])
+}
+
+model ProductVariant {
+  id              String   @id @default(uuid())
+  productId       String
+  product         Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size            String   // e.g. XS, S, M, L, XL
+  color           String
+  stock           Int      @default(0)
+  priceAdjustment Int      @default(0) // In paise
+  sku             String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([productId])
+}
+
+model Order {
+  id                     String      @id @default(uuid())
+  orderNumber            String      @unique // e.g. AIDAH-2026-XXXX
+  userId                 String?
+  user                   User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  customerEmail          String
+  customerPhone          String
+  shippingAddress        String      // JSON stringified address
+  billingAddress         String?     // Optional JSON stringified billing address
+  subtotal               Int         // In paise
+  discountTotal          Int         @default(0)
+  shippingFee            Int         @default(0)
+  totalAmount            Int         // In paise
+  currency               String      @default("INR")
+  status                 String      @default("PENDING") // PENDING, CONFIRMED, PROCESSING, SHIPPED, DELIVERED, CANCELLED, REFUNDED
+  paymentStatus          String      @default("UNPAID")  // UNPAID, AUTHORIZED, PAID, FAILED, REFUNDED
+  paymentGateway         String      @default("RAZORPAY")
+  paymentGatewayOrderId   String?
+  paymentGatewayPaymentId String?
+  trackingId             String?
+  courierPartner         String?
+  notes                  String?
+  orderItems             OrderItem[]
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+
+  @@index([orderNumber])
+  @@index([userId])
+  @@index([customerEmail])
+  @@index([status])
+}
+
+model OrderItem {
+  id           String   @id @default(uuid())
+  orderId      String
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId    String?
+  product      Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productTitle String
+  variantInfo  String?  // e.g. "Size: M, Color: Ice Blue"
+  unitPrice    Int      // In paise
+  quantity     Int
+  totalPrice   Int      // In paise
+  createdAt    DateTime @default(now())
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Coupon {
+  id            String    @id @default(uuid())
+  code          String    @unique // Uppercase, e.g. "AIDAH10"
+  discountType  String    // PERCENTAGE or FIXED
+  value         Int       // Percentage (e.g. 10) or Flat paise (e.g. 50000 = ₹500)
+  minOrderValue Int       @default(0) // In paise
+  maxDiscount   Int?      // In paise
+  usageLimit    Int?
+  usedCount     Int       @default(0)
+  expiresAt     DateTime?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([code])
+}
+
+model Session {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique // SHA-256 hash of refresh token
+  ipAddress String?
+  userAgent String?
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  adminId   String
+  admin     User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  action    String   // e.g. "PRODUCT_CREATE", "ORDER_STATUS_UPDATE"
+  details   String   // JSON string of action details
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([adminId])
+  @@index([action])
+}

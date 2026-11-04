@@ -11,7 +11,13 @@ const badgeStyles: Record<string, string> = {
   "Limited Edition": "bg-cream text-cocoa border border-gold/40",
 };
 
-export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
+export function ProductCard({
+  product,
+  priority = false,
+}: {
+  product: Product;
+  priority?: boolean;
+}) {
   const { has, toggle } = useWishlist();
   const wished = has(product.slug);
 
@@ -28,7 +34,9 @@ export function ProductCard({ product, priority = false }: { product: Product; p
             className="aspect-[3/4] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
           />
           {product.badge && (
-            <span className={`absolute left-3 top-3 rounded-full px-3 py-1 text-[0.65rem] font-medium uppercase tracking-[0.15em] ${badgeStyles[product.badge]}`}>
+            <span
+              className={`absolute left-3 top-3 rounded-full px-3 py-1 text-[0.65rem] font-medium uppercase tracking-[0.15em] ${badgeStyles[product.badge]}`}
+            >
               {product.badge}
             </span>
           )}
@@ -45,7 +53,10 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         onClick={() => toggle(product.slug)}
         className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-background/85 opacity-0 shadow-sm backdrop-blur transition-all duration-300 group-hover:opacity-100 focus-visible:opacity-100 hover:bg-background"
       >
-        <Heart className={`h-4 w-4 ${wished ? "fill-rose text-rose" : "text-cocoa"}`} strokeWidth={1.5} />
+        <Heart
+          className={`h-4 w-4 ${wished ? "fill-rose text-rose" : "text-cocoa"}`}
+          strokeWidth={1.5}
+        />
       </button>
 
       <div className="mt-4 px-1">
@@ -57,7 +68,9 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         <p className="mt-1 flex items-baseline gap-2 text-sm">
           <span className="font-medium">{formatINR(product.price)}</span>
           {product.compareAtPrice && (
-            <span className="text-muted-foreground line-through">{formatINR(product.compareAtPrice)}</span>
+            <span className="text-muted-foreground line-through">
+              {formatINR(product.compareAtPrice)}
+            </span>
           )}
         </p>
       </div>

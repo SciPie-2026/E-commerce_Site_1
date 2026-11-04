@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Heart, Search, ShoppingBag, Menu, X, ChevronDown } from "lucide-react";
+import { Heart, Search, ShoppingBag, Menu, X, ChevronDown, User } from "lucide-react";
 import { collections, logoImg } from "@/data/catalog";
 import { useCart } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
+import { useAuth } from "@/lib/auth-context";
 
 const mainNav = [
   { label: "New In", to: "/collections/new-arrivals" },
@@ -13,10 +14,16 @@ const mainNav = [
 ] as const;
 
 export function Header() {
+  const { user, isAdmin } = useAuth();
   const { count } = useCart();
   const { slugs: wishlist } = useWishlist();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50">
@@ -43,7 +50,10 @@ export function Header() {
             >
               <Menu className="h-5 w-5" strokeWidth={1.5} />
             </button>
-            <nav className="hidden items-center gap-7 text-[0.8rem] tracking-wide lg:flex" aria-label="Primary">
+            <nav
+              className="hidden items-center gap-7 text-[0.8rem] tracking-wide lg:flex"
+              aria-label="Primary"
+            >
               {mainNav.slice(0, 2).map((item) => (
                 <Link
                   key={item.label}
@@ -56,9 +66,15 @@ export function Header() {
               ))}
               {/* Collections dropdown */}
               <div className="group relative py-2">
-                <button className="flex items-center gap-1 transition-colors group-hover:text-rose-deep" aria-haspopup="true">
+                <button
+                  className="flex items-center gap-1 transition-colors group-hover:text-rose-deep"
+                  aria-haspopup="true"
+                >
                   Collections
-                  <ChevronDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-180" strokeWidth={1.5} />
+                  <ChevronDown
+                    className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-180"
+                    strokeWidth={1.5}
+                  />
                 </button>
                 <div className="invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 translate-y-2 rounded-2xl border border-border bg-popover p-3 opacity-0 shadow-xl shadow-blush/40 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                   <div className="grid grid-cols-2 gap-x-4 gap-y-1">
@@ -89,7 +105,10 @@ export function Header() {
           </div>
 
           {/* Logo */}
-          <Link to="/" className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2.5 transition-opacity hover:opacity-85">
+          <Link
+            to="/"
+            className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2.5 transition-opacity hover:opacity-85"
+          >
             <img
               src={logoImg}
               alt="aidah The Label logo"
@@ -109,22 +128,46 @@ export function Header() {
 
           {/* Right icons */}
           <div className="flex items-center gap-4 sm:gap-5">
-            <Link to="/shop" aria-label="Search the shop" className="transition-colors hover:text-rose-deep">
+            <Link
+              to="/shop"
+              aria-label="Search the shop"
+              className="transition-colors hover:text-rose-deep"
+            >
               <Search className="h-5 w-5" strokeWidth={1.5} />
             </Link>
-            <Link to={"/wishlist" as any} aria-label="Wishlist" className="relative transition-colors hover:text-rose-deep">
+            <Link
+              to={"/wishlist" as any}
+              aria-label="Wishlist"
+              className="relative transition-colors hover:text-rose-deep"
+            >
               <Heart className="h-5 w-5" strokeWidth={1.5} />
-              {wishlist.length > 0 && (
+              {mounted && wishlist.length > 0 && (
                 <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-rose px-0.5 text-[0.6rem] font-medium text-white">
                   {wishlist.length}
                 </span>
               )}
             </Link>
-            <Link to={"/cart" as any} aria-label="Shopping bag" className="relative transition-colors hover:text-rose-deep">
+            <Link
+              to={"/cart" as any}
+              aria-label="Shopping bag"
+              className="relative transition-colors hover:text-rose-deep"
+            >
               <ShoppingBag className="h-5 w-5" strokeWidth={1.5} />
-              {count > 0 && (
+              {mounted && count > 0 && (
                 <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-charcoal px-0.5 text-[0.6rem] font-medium text-ivory">
                   {count}
+                </span>
+              )}
+            </Link>
+            <Link
+              to={(user ? "/account" : "/login") as any}
+              aria-label={user ? "Atelier Account" : "Sign In"}
+              className="relative transition-colors hover:text-rose-deep flex items-center gap-1.5"
+            >
+              <User className="h-5 w-5" strokeWidth={1.5} />
+              {isAdmin && (
+                <span className="hidden sm:inline-flex rounded-full bg-gold/15 px-2 py-0.5 text-[0.65rem] font-medium text-gold border border-gold/30">
+                  Admin
                 </span>
               )}
             </Link>
@@ -135,7 +178,10 @@ export function Header() {
       {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-charcoal/30 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+          <div
+            className="absolute inset-0 bg-charcoal/30 backdrop-blur-sm"
+            onClick={() => setMobileOpen(false)}
+          />
           <div className="animate-fade-up absolute inset-y-0 left-0 flex w-80 max-w-[85vw] flex-col bg-background p-6 shadow-2xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
@@ -147,8 +193,12 @@ export function Header() {
                   className="h-8 w-8 rounded-full object-cover ring-1 ring-gold/40"
                 />
                 <div className="flex flex-col leading-none">
-                  <span className="font-display text-lg tracking-[0.25em]">AIDAH<span className="text-gold">.</span></span>
-                  <span className="text-[0.5rem] tracking-[0.2em] text-gold uppercase">The Label</span>
+                  <span className="font-display text-lg tracking-[0.25em]">
+                    AIDAH<span className="text-gold">.</span>
+                  </span>
+                  <span className="text-[0.5rem] tracking-[0.2em] text-gold uppercase">
+                    The Label
+                  </span>
                 </div>
               </div>
               <button aria-label="Close menu" onClick={() => setMobileOpen(false)}>
@@ -160,7 +210,10 @@ export function Header() {
                 <button
                   key={item.label}
                   className="py-3 text-left font-display text-2xl transition-colors hover:text-rose-deep"
-                  onClick={() => { setMobileOpen(false); navigate({ to: item.to as any }); }}
+                  onClick={() => {
+                    setMobileOpen(false);
+                    navigate({ to: item.to as any });
+                  }}
                 >
                   {item.label}
                 </button>
@@ -171,7 +224,13 @@ export function Header() {
                   <button
                     key={c.slug}
                     className="py-2 text-left text-[0.95rem] text-cocoa transition-colors hover:text-rose-deep"
-                    onClick={() => { setMobileOpen(false); navigate({ to: "/collections/$slug" as any, params: { slug: c.slug } as any }); }}
+                    onClick={() => {
+                      setMobileOpen(false);
+                      navigate({
+                        to: "/collections/$slug" as any,
+                        params: { slug: c.slug } as any,
+                      });
+                    }}
                   >
                     {c.name}
                   </button>

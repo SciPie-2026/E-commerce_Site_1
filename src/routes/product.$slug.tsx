@@ -36,7 +36,8 @@ export const Route = createFileRoute("/product/$slug")({
         { title: p ? `${p.name} — AIDAH The Label` : "Product — AIDAH" },
         {
           name: "description",
-          content: p?.description || "Handcrafted designer wear from Aidah The Label boutique, Gurugram.",
+          content:
+            p?.description || "Handcrafted designer wear from Aidah The Label boutique, Gurugram.",
         },
         { property: "og:title", content: p?.name },
         { property: "og:description", content: p?.description },
@@ -81,16 +82,22 @@ function ProductDetailPage() {
   };
 
   const relatedProducts = products
-    .filter((p) => p.id !== product.id && p.categorySlugs.some((c) => product.categorySlugs.includes(c)))
+    .filter(
+      (p) => p.id !== product.id && p.categorySlugs.some((c) => product.categorySlugs.includes(c)),
+    )
     .slice(0, 4);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Breadcrumbs */}
       <nav aria-label="Breadcrumb" className="mb-8 flex items-center gap-2 text-xs text-cocoa">
-        <Link to="/" className="hover:text-rose-deep">Home</Link>
+        <Link to="/" className="hover:text-rose-deep">
+          Home
+        </Link>
         <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-        <Link to="/shop" className="hover:text-rose-deep">Shop</Link>
+        <Link to="/shop" className="hover:text-rose-deep">
+          Shop
+        </Link>
         <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
         <span className="truncate text-foreground font-medium">{product.name}</span>
       </nav>
@@ -108,10 +115,16 @@ function ProductDetailPage() {
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
                     className={`relative h-20 w-16 sm:h-24 sm:w-20 overflow-hidden rounded-xl border-2 transition-all shrink-0 ${
-                      selectedImage === idx ? "border-gold ring-2 ring-gold/30 shadow-md" : "border-border/60 opacity-70 hover:opacity-100"
+                      selectedImage === idx
+                        ? "border-gold ring-2 ring-gold/30 shadow-md"
+                        : "border-border/60 opacity-70 hover:opacity-100"
                     }`}
                   >
-                    <img src={img} alt={`${product.name} view ${idx + 1}`} className="h-full w-full object-cover" />
+                    <img
+                      src={img}
+                      alt={`${product.name} view ${idx + 1}`}
+                      className="h-full w-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -136,7 +149,10 @@ function ProductDetailPage() {
                 aria-label={isWished ? "Remove from wishlist" : "Add to wishlist"}
                 className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-background/85 shadow-md backdrop-blur-md transition-transform hover:scale-110"
               >
-                <Heart className={`h-5 w-5 ${isWished ? "fill-rose text-rose" : "text-cocoa"}`} strokeWidth={1.5} />
+                <Heart
+                  className={`h-5 w-5 ${isWished ? "fill-rose text-rose" : "text-cocoa"}`}
+                  strokeWidth={1.5}
+                />
               </button>
             </div>
           </div>
@@ -190,9 +206,13 @@ function ProductDetailPage() {
                 ))}
               </div>
               <span className="font-medium text-foreground">{product.rating}</span>
-              <span className="text-muted-foreground">({product.reviewCount} boutique reviews)</span>
+              <span className="text-muted-foreground">
+                ({product.reviewCount} boutique reviews)
+              </span>
             </div>
-            <span className="text-muted-foreground tracking-wider uppercase">SKU: {product.sku}</span>
+            <span className="text-muted-foreground tracking-wider uppercase">
+              SKU: {product.sku}
+            </span>
           </div>
 
           {/* Pricing */}
@@ -206,23 +226,26 @@ function ProductDetailPage() {
                   {formatINR(product.compareAtPrice)}
                 </span>
                 <span className="rounded-full bg-rose/15 px-3 py-1 text-xs font-semibold text-rose-deep">
-                  {Math.round((1 - product.price / product.compareAtPrice) * 100)}% Privilege Savings
+                  {Math.round((1 - product.price / product.compareAtPrice) * 100)}% Privilege
+                  Savings
                 </span>
               </>
             )}
           </div>
-          <p className="mt-1 text-xs text-cocoa">Taxes included. Hand-delivered in archival Aidah packaging.</p>
+          <p className="mt-1 text-xs text-cocoa">
+            Taxes included. Hand-delivered in archival Aidah packaging.
+          </p>
 
           {/* Description */}
-          <p className="mt-6 text-sm leading-relaxed text-cocoa">
-            {product.description}
-          </p>
+          <p className="mt-6 text-sm leading-relaxed text-cocoa">{product.description}</p>
 
           {/* Color Selector */}
           {product.colors.length > 0 && (
             <div className="mt-6">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-medium text-foreground">Colour: <span className="text-cocoa font-normal">{selectedColor}</span></span>
+                <span className="font-medium text-foreground">
+                  Colour: <span className="text-cocoa font-normal">{selectedColor}</span>
+                </span>
               </div>
               <div className="mt-2.5 flex items-center gap-3">
                 {product.colors.map((c) => (
@@ -232,7 +255,9 @@ function ProductDetailPage() {
                     title={c.name}
                     aria-label={`Select color ${c.name}`}
                     className={`relative h-8 w-8 rounded-full border-2 transition-transform hover:scale-110 ${
-                      selectedColor === c.name ? "border-charcoal ring-2 ring-gold ring-offset-2 scale-110" : "border-border"
+                      selectedColor === c.name
+                        ? "border-charcoal ring-2 ring-gold ring-offset-2 scale-110"
+                        : "border-border"
                     }`}
                     style={{ backgroundColor: c.hex }}
                   />
@@ -245,7 +270,10 @@ function ProductDetailPage() {
           <div className="mt-6">
             <div className="flex items-center justify-between text-xs">
               <span className="font-medium text-foreground">Select Size</span>
-              <Link to={"/size-guide" as any} className="text-rose-deep underline-offset-2 hover:underline">
+              <Link
+                to={"/size-guide" as any}
+                className="text-rose-deep underline-offset-2 hover:underline"
+              >
                 Size &amp; Fit Guide
               </Link>
             </div>
@@ -262,8 +290,8 @@ function ProductDetailPage() {
                       selectedSize === size
                         ? "border-charcoal bg-charcoal text-ivory shadow-md"
                         : isAvailable
-                        ? "border-border bg-background hover:border-gold hover:bg-secondary"
-                        : "border-border/40 bg-muted/30 text-muted-foreground line-through cursor-not-allowed"
+                          ? "border-border bg-background hover:border-gold hover:bg-secondary"
+                          : "border-border/40 bg-muted/30 text-muted-foreground line-through cursor-not-allowed"
                     }`}
                   >
                     {size}
@@ -272,9 +300,13 @@ function ProductDetailPage() {
               })}
             </div>
             {isOutOfStock ? (
-              <p className="mt-2 text-xs text-rose-deep">Currently crafted to order — standard delivery 7–10 days.</p>
+              <p className="mt-2 text-xs text-rose-deep">
+                Currently crafted to order — standard delivery 7–10 days.
+              </p>
             ) : (
-              <p className="mt-2 text-xs text-muted-foreground">Only {stockAvailable} atelier pieces ready in size {selectedSize}.</p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Only {stockAvailable} atelier pieces ready in size {selectedSize}.
+              </p>
             )}
           </div>
 
@@ -315,7 +347,8 @@ function ProductDetailPage() {
                 </>
               ) : (
                 <>
-                  <ShoppingBag className="h-4 w-4" /> Add to Shopping Bag • {formatINR(product.price * quantity)}
+                  <ShoppingBag className="h-4 w-4" /> Add to Shopping Bag •{" "}
+                  {formatINR(product.price * quantity)}
                 </>
               )}
             </button>
@@ -328,7 +361,8 @@ function ProductDetailPage() {
               Bespoke Made-to-Measure Available
             </p>
             <p className="mt-1">
-              Need custom sleeve length, neckline alterations, or matching blouse tailoring? Contact our Gurugram concierge after ordering or visit Baani City Centre.
+              Need custom sleeve length, neckline alterations, or matching blouse tailoring? Contact
+              our Gurugram concierge after ordering or visit Baani City Centre.
             </p>
           </div>
 
@@ -345,7 +379,13 @@ function ProductDetailPage() {
                       : "border-transparent text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {tab === "details" ? "Fabric & Craft" : tab === "care" ? "Care Guide" : tab === "fit" ? "Fit Notes" : "Delivery"}
+                  {tab === "details"
+                    ? "Fabric & Craft"
+                    : tab === "care"
+                      ? "Care Guide"
+                      : tab === "fit"
+                        ? "Fit Notes"
+                        : "Delivery"}
                 </button>
               ))}
             </div>
@@ -353,28 +393,54 @@ function ProductDetailPage() {
             <div className="py-4 text-xs leading-relaxed text-cocoa">
               {activeTab === "details" && (
                 <div className="space-y-2">
-                  <p><strong>Fabric:</strong> {product.fabric}</p>
-                  <p><strong>Occasion:</strong> {product.occasion}</p>
-                  <p><strong>Atelier Craft:</strong> Hand-finished by master karigars with French seams, concealed zippers, and pure silk lining.</p>
+                  <p>
+                    <strong>Fabric:</strong> {product.fabric}
+                  </p>
+                  <p>
+                    <strong>Occasion:</strong> {product.occasion}
+                  </p>
+                  <p>
+                    <strong>Atelier Craft:</strong> Hand-finished by master karigars with French
+                    seams, concealed zippers, and pure silk lining.
+                  </p>
                 </div>
               )}
               {activeTab === "care" && (
                 <div className="space-y-2">
-                  <p><strong>Care:</strong> {product.care}</p>
-                  <p>Store in breathable cotton muslin garment bag provided with your order away from direct sunlight.</p>
+                  <p>
+                    <strong>Care:</strong> {product.care}
+                  </p>
+                  <p>
+                    Store in breathable cotton muslin garment bag provided with your order away from
+                    direct sunlight.
+                  </p>
                 </div>
               )}
               {activeTab === "fit" && (
                 <div className="space-y-2">
-                  <p><strong>Silhouette Fit:</strong> {product.fit}</p>
-                  <p>Model is 5'8" wearing size S. We offer complimentary fitting adjustments at our Baani City Centre boutique.</p>
+                  <p>
+                    <strong>Silhouette Fit:</strong> {product.fit}
+                  </p>
+                  <p>
+                    Model is 5'8" wearing size S. We offer complimentary fitting adjustments at our
+                    Baani City Centre boutique.
+                  </p>
                 </div>
               )}
               {activeTab === "shipping" && (
                 <div className="space-y-2">
-                  <p><strong>Domestic Delivery:</strong> Dispatched in 2–4 business days via express courier across India.</p>
-                  <p><strong>Studio Pickup:</strong> Ready within 24 hours at Baani City Centre, Sector 63, Gurugram.</p>
-                  <p><strong>Returns:</strong> 14-day hassle-free boutique alterations and size exchange policy.</p>
+                  <p>
+                    <strong>Domestic Delivery:</strong> Dispatched in 2–4 business days via express
+                    courier across India.
+                  </p>
+                  <p>
+                    <strong>Studio Pickup:</strong> Ready within 24 hours at Baani City Centre,
+                    Sector 63, Gurugram.
+                  </p>
+                  <p>
+                    <strong>Returns:</strong> 14-day hassle-free boutique alterations and size
+                    exchange policy.
+                  </p>
                 </div>
               )}
             </div>
@@ -390,8 +456,12 @@ function ProductDetailPage() {
               <p className="eyebrow text-gold">Curated Complements</p>
               <h2 className="display-2 mt-2 text-2xl sm:text-3xl">You May Also Cherish</h2>
             </div>
-            <Link to="/shop" className="group hidden items-center gap-2 text-xs tracking-wide text-cocoa hover:text-rose-deep sm:flex">
-              Explore All <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <Link
+              to="/shop"
+              className="group hidden items-center gap-2 text-xs tracking-wide text-cocoa hover:text-rose-deep sm:flex"
+            >
+              Explore All{" "}
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">

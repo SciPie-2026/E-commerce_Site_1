@@ -27,7 +27,10 @@ export const Route = createFileRoute("/collections/$slug")({
     return {
       meta: [
         { title: c ? `${c.name} — AIDAH The Label` : "Collection — AIDAH" },
-        { name: "description", content: c?.description || "Curated boutique collections from Aidah The Label, Gurugram." },
+        {
+          name: "description",
+          content: c?.description || "Curated boutique collections from Aidah The Label, Gurugram.",
+        },
         { property: "og:title", content: c?.name },
         { property: "og:description", content: c?.description },
       ],
@@ -43,9 +46,13 @@ function CollectionDetailPage() {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="mb-8 flex items-center gap-2 text-xs text-cocoa">
-        <Link to="/" className="hover:text-rose-deep">Home</Link>
+        <Link to="/" className="hover:text-rose-deep">
+          Home
+        </Link>
         <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-        <Link to="/shop" className="hover:text-rose-deep">Collections</Link>
+        <Link to="/shop" className="hover:text-rose-deep">
+          Collections
+        </Link>
         <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
         <span className="truncate text-foreground font-medium">{collection.name}</span>
       </nav>
@@ -54,15 +61,9 @@ function CollectionDetailPage() {
       <div className="relative overflow-hidden rounded-[2.5rem] border border-gold/20 bg-gradient-to-r from-cream via-blush/30 to-cream p-8 sm:p-14 shadow-lg">
         <div className="max-w-2xl">
           <p className="eyebrow text-gold">Aidah Atelier Curation</p>
-          <h1 className="display-1 mt-2 text-3xl sm:text-5xl text-foreground">
-            {collection.name}
-          </h1>
-          <p className="mt-3 text-base text-rose-deep font-medium">
-            {collection.tagline}
-          </p>
-          <p className="mt-4 text-sm leading-relaxed text-cocoa">
-            {collection.description}
-          </p>
+          <h1 className="display-1 mt-2 text-3xl sm:text-5xl text-foreground">{collection.name}</h1>
+          <p className="mt-3 text-base text-rose-deep font-medium">{collection.tagline}</p>
+          <p className="mt-4 text-sm leading-relaxed text-cocoa">{collection.description}</p>
           <div className="mt-6 flex items-center gap-4 text-xs text-muted-foreground">
             <span>{colProducts.length} handcrafted pieces</span>
             <span>•</span>

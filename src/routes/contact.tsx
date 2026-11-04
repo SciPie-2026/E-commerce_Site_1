@@ -9,7 +9,8 @@ export const Route = createFileRoute("/contact")({
       { title: "Visit Studio & Contact — AIDAH The Label | Gurugram" },
       {
         name: "description",
-        content: "Visit our atelier at Baani City Centre, Sector 63, Gurugram. Book a bridal styling consultation or custom made-to-measure fitting.",
+        content:
+          "Visit our atelier at Baani City Centre, Sector 63, Gurugram. Book a bridal styling consultation or custom made-to-measure fitting.",
       },
     ],
   }),
@@ -33,7 +34,8 @@ function ContactPage() {
           Visit Our <em className="italic font-normal text-rose-deep">Gurugram</em> Studio
         </h1>
         <p className="mt-4 text-sm sm:text-base text-cocoa leading-relaxed font-light">
-          Whether you seek a bespoke bridal consultation, custom made-to-measure fitting, or simply wish to experience our fabric textures in person, our stylists await you.
+          Whether you seek a bespoke bridal consultation, custom made-to-measure fitting, or simply
+          wish to experience our fabric textures in person, our stylists await you.
         </p>
       </div>
 
@@ -42,10 +44,18 @@ function ContactPage() {
         <div className="lg:col-span-5 space-y-6">
           <div className="rounded-3xl border border-gold/30 bg-cream/70 p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-6">
-              <img src={logoImg} alt="Aidah The Label" className="h-10 w-10 rounded-full object-cover ring-1 ring-gold/40" />
+              <img
+                src={logoImg}
+                alt="Aidah The Label"
+                className="h-10 w-10 rounded-full object-cover ring-1 ring-gold/40"
+              />
               <div>
-                <h3 className="font-display text-xl text-foreground">Aidah Designer House &amp; Boutique</h3>
-                <p className="text-[0.65rem] uppercase tracking-widest text-gold font-medium">Flagship Atelier</p>
+                <h3 className="font-display text-xl text-foreground">
+                  Aidah Designer House &amp; Boutique
+                </h3>
+                <p className="text-[0.65rem] uppercase tracking-widest text-gold font-medium">
+                  Flagship Atelier
+                </p>
               </div>
             </div>
 
@@ -99,9 +109,12 @@ function ContactPage() {
         {/* Appointment Form (7 Cols) */}
         <div className="lg:col-span-7">
           <div className="rounded-3xl border border-border bg-card p-8 sm:p-10 shadow-sm">
-            <h2 className="font-display text-2xl text-foreground mb-2">Book a Fitting or Consultation</h2>
+            <h2 className="font-display text-2xl text-foreground mb-2">
+              Book a Fitting or Consultation
+            </h2>
             <p className="text-xs text-muted-foreground mb-6">
-              Fill in your preferred date and requirements. Our boutique concierge will confirm your slot within 4 hours.
+              Fill in your preferred date and requirements. Our boutique concierge will confirm your
+              slot within 4 hours.
             </p>
 
             {submitted ? (
@@ -109,7 +122,8 @@ function ContactPage() {
                 <Check className="mx-auto h-10 w-10 text-gold mb-3" />
                 <h3 className="font-display text-xl text-foreground">Appointment Requested</h3>
                 <p className="mt-2 text-xs text-cocoa leading-relaxed">
-                  Thank you, {form.name}. Our Gurugram concierge has received your request and will contact you at {form.email} to confirm your appointment.
+                  Thank you, {form.name}. Our Gurugram concierge has received your request and will
+                  contact you at {form.email} to confirm your appointment.
                 </p>
               </div>
             ) : (
@@ -126,7 +140,9 @@ function ContactPage() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-foreground mb-1">Email Address *</label>
+                    <label className="block font-medium text-foreground mb-1">
+                      Email Address *
+                    </label>
                     <input
                       type="email"
                       required
@@ -140,7 +156,9 @@ function ContactPage() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block font-medium text-foreground mb-1">Contact Phone / WhatsApp *</label>
+                    <label className="block font-medium text-foreground mb-1">
+                      Contact Phone / WhatsApp *
+                    </label>
                     <input
                       required
                       value={form.phone}
@@ -161,7 +179,9 @@ function ContactPage() {
                 </div>
 
                 <div>
-                  <label className="block font-medium text-foreground mb-1">Special Notes / Silhouette Interest</label>
+                  <label className="block font-medium text-foreground mb-1">
+                    Special Notes / Silhouette Interest
+                  </label>
                   <textarea
                     rows={4}
                     value={form.message}

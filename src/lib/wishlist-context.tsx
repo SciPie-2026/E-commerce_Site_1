@@ -29,9 +29,11 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
       slugs,
       has: (slug: string) => slugs.includes(slug),
       toggle: (slug: string) =>
-        setSlugs((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug])),
+        setSlugs((prev) =>
+          prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
+        ),
     }),
-    [slugs]
+    [slugs],
   );
 
   return <WishlistContext.Provider value={value}>{children}</WishlistContext.Provider>;

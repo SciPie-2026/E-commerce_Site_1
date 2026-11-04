@@ -17,13 +17,18 @@ export function Footer() {
               className="h-10 w-10 rounded-full object-cover ring-1 ring-gold/40 shadow-sm"
             />
             <div className="flex flex-col leading-none">
-              <p className="font-display text-2xl tracking-[0.25em]">AIDAH<span className="text-gold">.</span></p>
-              <p className="text-[0.55rem] font-medium tracking-[0.22em] text-gold uppercase">The Label</p>
+              <p className="font-display text-2xl tracking-[0.25em]">
+                AIDAH<span className="text-gold">.</span>
+              </p>
+              <p className="text-[0.55rem] font-medium tracking-[0.22em] text-gold uppercase">
+                The Label
+              </p>
             </div>
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-cocoa">
-            Aidah Designer House &amp; Boutique — heirloom lehengas, luxury linen &amp; silk co-ords,
-            and contemporary occasion wear crafted in small batches for your most memorable moments.
+            Aidah Designer House &amp; Boutique — heirloom lehengas, luxury linen &amp; silk
+            co-ords, and contemporary occasion wear crafted in small batches for your most memorable
+            moments.
           </p>
           <div className="mt-6 flex gap-4 text-cocoa">
             <a
@@ -62,12 +67,20 @@ export function Footer() {
           <ul className="mt-4 space-y-2.5 text-sm">
             {collections.slice(0, 6).map((c) => (
               <li key={c.slug}>
-                <Link to={"/collections/$slug" as any} params={{ slug: c.slug } as any} className="text-cocoa transition-colors hover:text-rose-deep">
+                <Link
+                  to={"/collections/$slug" as any}
+                  params={{ slug: c.slug } as any}
+                  className="text-cocoa transition-colors hover:text-rose-deep"
+                >
                   {c.name}
                 </Link>
               </li>
             ))}
-            <li><Link to="/shop" className="text-cocoa transition-colors hover:text-rose-deep">Shop All Products</Link></li>
+            <li>
+              <Link to="/shop" className="text-cocoa transition-colors hover:text-rose-deep">
+                Shop All Products
+              </Link>
+            </li>
           </ul>
         </nav>
 
@@ -75,11 +88,46 @@ export function Footer() {
         <nav aria-label="Company links">
           <p className="eyebrow text-cocoa">The Boutique</p>
           <ul className="mt-4 space-y-2.5 text-sm">
-            <li><Link to={"/about" as any} className="text-cocoa transition-colors hover:text-rose-deep">Our Story &amp; Atelier</Link></li>
-            <li><Link to={"/lookbook" as any} className="text-cocoa transition-colors hover:text-rose-deep">Runway &amp; Lookbook</Link></li>
-            <li><Link to={"/contact" as any} className="text-cocoa transition-colors hover:text-rose-deep">Visit the Studio</Link></li>
-            <li><Link to={"/faq" as any} className="text-cocoa transition-colors hover:text-rose-deep">Boutique FAQ</Link></li>
-            <li><Link to={"/size-guide" as any} className="text-cocoa transition-colors hover:text-rose-deep">Custom Sizing Guide</Link></li>
+            <li>
+              <Link
+                to={"/about" as any}
+                className="text-cocoa transition-colors hover:text-rose-deep"
+              >
+                Our Story &amp; Atelier
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/lookbook" as any}
+                className="text-cocoa transition-colors hover:text-rose-deep"
+              >
+                Runway &amp; Lookbook
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/contact" as any}
+                className="text-cocoa transition-colors hover:text-rose-deep"
+              >
+                Visit the Studio
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/faq" as any}
+                className="text-cocoa transition-colors hover:text-rose-deep"
+              >
+                Boutique FAQ
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/size-guide" as any}
+                className="text-cocoa transition-colors hover:text-rose-deep"
+              >
+                Custom Sizing Guide
+              </Link>
+            </li>
           </ul>
         </nav>
 
@@ -101,17 +149,35 @@ export function Footer() {
             </li>
           </ul>
           <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-            <li><Link to={"/shipping-policy" as any} className="hover:underline">Shipping</Link></li>
-            <li><Link to={"/returns" as any} className="hover:underline">Returns &amp; Alterations</Link></li>
-            <li><Link to={"/privacy" as any} className="hover:underline">Privacy</Link></li>
-            <li><Link to={"/terms" as any} className="hover:underline">Terms</Link></li>
+            <li>
+              <Link to={"/shipping-policy" as any} className="hover:underline">
+                Shipping
+              </Link>
+            </li>
+            <li>
+              <Link to={"/returns" as any} className="hover:underline">
+                Returns &amp; Alterations
+              </Link>
+            </li>
+            <li>
+              <Link to={"/privacy" as any} className="hover:underline">
+                Privacy
+              </Link>
+            </li>
+            <li>
+              <Link to={"/terms" as any} className="hover:underline">
+                Terms
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
 
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-muted-foreground sm:flex-row sm:px-6">
-          <p>© {new Date().getFullYear()} AIDAH The Label. All rights reserved. Handcrafted in India.</p>
+          <p>
+            © {new Date().getFullYear()} AIDAH The Label. All rights reserved. Handcrafted in India.
+          </p>
           <p className="italic">
             Designer House &amp; Boutique · Baani City Centre, Sec 63, Gurugram
           </p>

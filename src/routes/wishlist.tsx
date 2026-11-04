@@ -9,7 +9,10 @@ export const Route = createFileRoute("/wishlist")({
   head: () => ({
     meta: [
       { title: "Wishlist — AIDAH The Label" },
-      { name: "description", content: "Your curated wishlist of handcrafted lehengas, silk sets, and occasion dresses." },
+      {
+        name: "description",
+        content: "Your curated wishlist of handcrafted lehengas, silk sets, and occasion dresses.",
+      },
     ],
   }),
   component: WishlistPage,
@@ -21,7 +24,7 @@ function WishlistPage() {
 
   const wishedProducts = products.filter((p) => slugs.includes(p.slug));
 
-  const handleMoveToBag = (product: typeof products[0]) => {
+  const handleMoveToBag = (product: (typeof products)[0]) => {
     add({
       productId: product.id,
       slug: product.slug,
@@ -62,9 +65,16 @@ function WishlistPage() {
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">
           {wishedProducts.map((p) => (
-            <div key={p.id} className="group relative rounded-2xl border border-border bg-card p-3 shadow-xs flex flex-col justify-between">
+            <div
+              key={p.id}
+              className="group relative rounded-2xl border border-border bg-card p-3 shadow-xs flex flex-col justify-between"
+            >
               <div>
-                <Link to={"/product/$slug" as any} params={{ slug: p.slug } as any} className="block relative aspect-[3/4] overflow-hidden rounded-xl bg-cream">
+                <Link
+                  to={"/product/$slug" as any}
+                  params={{ slug: p.slug } as any}
+                  className="block relative aspect-[3/4] overflow-hidden rounded-xl bg-cream"
+                >
                   <img
                     src={p.images[0]}
                     alt={p.name}
@@ -88,9 +98,7 @@ function WishlistPage() {
                       {p.name}
                     </h3>
                   </Link>
-                  <p className="mt-1 text-xs font-semibold text-foreground">
-                    {formatINR(p.price)}
-                  </p>
+                  <p className="mt-1 text-xs font-semibold text-foreground">{formatINR(p.price)}</p>
                 </div>
               </div>
 

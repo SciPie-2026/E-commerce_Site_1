@@ -63,56 +63,64 @@ export const collections: Collection[] = [
     slug: "ethnic-wear",
     name: "Ethnic Wear",
     tagline: "Hand-finished Indian craft",
-    description: "Lehengas, anarkalis and celebratory kurta sets worked with zari, gota patti and resham by our karigar partners.",
+    description:
+      "Lehengas, anarkalis and celebratory kurta sets worked with zari, gota patti and resham by our karigar partners.",
     image: ethnicImg,
   },
   {
     slug: "co-ord-sets",
     name: "Co-ord Sets",
     tagline: "Effortless luxury pairs",
-    description: "Matching two-piece ensembles in textured silk, organic linen and artisanal handloom weaves — one decision, endless polish.",
+    description:
+      "Matching two-piece ensembles in textured silk, organic linen and artisanal handloom weaves — one decision, endless polish.",
     image: auroraSage,
   },
   {
     slug: "evening-wear",
     name: "Evening & Gowns",
     tagline: "Quietly dramatic",
-    description: "Pre-draped saree gowns, metallic jacquards and liquid silks for galas, receptions and red-carpet moments.",
+    description:
+      "Pre-draped saree gowns, metallic jacquards and liquid silks for galas, receptions and red-carpet moments.",
     image: seraphinaGown,
   },
   {
     slug: "party-wear",
     name: "Party Wear & Capes",
     tagline: "Dressed for celebration",
-    description: "Draped dhoti skirts, crystal-fringed bustiers and floor-length sheer embroidered cape jackets.",
+    description:
+      "Draped dhoti skirts, crystal-fringed bustiers and floor-length sheer embroidered cape jackets.",
     image: valeriaCape,
   },
   {
     slug: "floral-dresses",
     name: "Floral & Resort",
     tagline: "Petals, printed and embroidered",
-    description: "Hand-drawn blooms across mulmul, organza and silk crepe for sunlit afternoons and resort getaways.",
+    description:
+      "Hand-drawn blooms across mulmul, organza and silk crepe for sunlit afternoons and resort getaways.",
     image: camilleMaxi,
   },
   {
     slug: "wedding-guest",
     name: "Wedding Guest",
     tagline: "For every celebration on the card",
-    description: "Festive-but-considered looks for mehendis, sangeets and weddings — radiant, refined and memorable.",
+    description:
+      "Festive-but-considered looks for mehendis, sangeets and weddings — radiant, refined and memorable.",
     image: begumPurple,
   },
   {
     slug: "casual-dresses",
     name: "Casual Dresses",
     tagline: "Everyday ease, softly tailored",
-    description: "Light, wearable dresses cut in breathable natural fabrics with an effortless, romantic finish.",
+    description:
+      "Light, wearable dresses cut in breathable natural fabrics with an effortless, romantic finish.",
     image: floralImg,
   },
   {
     slug: "new-arrivals",
     name: "New Arrivals",
     tagline: "Fresh from the Gurugram atelier",
-    description: "The newest styles from our studio at Baani City Centre, Sector 63, Gurugram — restocked weekly.",
+    description:
+      "The newest styles from our studio at Baani City Centre, Sector 63, Gurugram — restocked weekly.",
     image: atelierFlatlay,
   },
   {
@@ -126,14 +134,16 @@ export const collections: Collection[] = [
     slug: "sale",
     name: "Curated Sale",
     tagline: "Archival favourites at gentle prices",
-    description: "Selected styles from previous drops, lovingly crafted and available while stocks last.",
+    description:
+      "Selected styles from previous drops, lovingly crafted and available while stocks last.",
     image: linenGurugram,
   },
   {
     slug: "seasonal-collections",
     name: "The Ivory Hour",
     tagline: "Our festive capsule edit",
-    description: "Champagne golds, blush organzas and candlelight shimmer made for evenings that run long.",
+    description:
+      "Champagne golds, blush organzas and candlelight shimmer made for evenings that run long.",
     image: opheliaKaftan,
   },
 ];
@@ -160,7 +170,8 @@ export const products: Product[] = [
     badge: "Bestseller",
     rating: 4.9,
     reviewCount: 94,
-    description: "A dream in motion — voluminous twirling kalidar lehenga scattered with heritage floral motifs, paired with a sweetheart neckline blouse and a diaphanous organza dupatta edged in playful handcrafted tassels.",
+    description:
+      "A dream in motion — voluminous twirling kalidar lehenga scattered with heritage floral motifs, paired with a sweetheart neckline blouse and a diaphanous organza dupatta edged in playful handcrafted tassels.",
     care: "Dry clean only. Store wrapped in muslin cloth.",
     fit: "Fitted bustier blouse with full flare twirl skirt; true to size.",
   },
@@ -183,7 +194,8 @@ export const products: Product[] = [
     badge: "New",
     rating: 4.8,
     reviewCount: 52,
-    description: "Hand-finished at our Gurugram atelier — pure peach organza kurta detailed with intricate white chikankari floral neck embroidery, styled with a gossamer lace-bordered dupatta and straight trousers.",
+    description:
+      "Hand-finished at our Gurugram atelier — pure peach organza kurta detailed with intricate white chikankari floral neck embroidery, styled with a gossamer lace-bordered dupatta and straight trousers.",
     care: "Dry clean or gentle hand wash cold. Dry in shade.",
     fit: "Classic straight silhouette; true to size.",
   },
@@ -206,7 +218,8 @@ export const products: Product[] = [
     badge: "New",
     rating: 4.9,
     reviewCount: 46,
-    description: "Sculpted modern couture — pre-pleated draped saree gown cut from luxurious ice-silver jacquard silk, accentuated with an asymmetric crystal-encrusted border embroidery and sleek fitted sleeves.",
+    description:
+      "Sculpted modern couture — pre-pleated draped saree gown cut from luxurious ice-silver jacquard silk, accentuated with an asymmetric crystal-encrusted border embroidery and sleek fitted sleeves.",
     care: "Dry clean only.",
     fit: "Fitted waist with pre-stitched flowing drape; true to size.",
   },
@@ -229,7 +242,8 @@ export const products: Product[] = [
     badge: "Limited Edition",
     rating: 4.8,
     reviewCount: 68,
-    description: "Statement party silhouette — pre-draped liquid satin dhoti skirt paired with a crystal bead-fringed sweetheart bustier and a floor-sweeping sheer embroidered lace cape jacket.",
+    description:
+      "Statement party silhouette — pre-draped liquid satin dhoti skirt paired with a crystal bead-fringed sweetheart bustier and a floor-sweeping sheer embroidered lace cape jacket.",
     care: "Dry clean only. Steam gently.",
     fit: "Structured cropped bustier with relaxed draped dhoti skirt.",
   },
@@ -252,7 +266,8 @@ export const products: Product[] = [
     badge: "Bestseller",
     rating: 4.8,
     reviewCount: 118,
-    description: "Understated luxury for intimate gatherings — softly tailored long-line tunic in textured sage silk with contrast wine-red geometric embroidery on the cuffs and V-neckline, paired with matching cigarette trousers.",
+    description:
+      "Understated luxury for intimate gatherings — softly tailored long-line tunic in textured sage silk with contrast wine-red geometric embroidery on the cuffs and V-neckline, paired with matching cigarette trousers.",
     care: "Machine wash cold on gentle cycle or dry clean.",
     fit: "Relaxed silhouette; true to size.",
   },
@@ -275,7 +290,8 @@ export const products: Product[] = [
     badge: "New",
     rating: 4.9,
     reviewCount: 39,
-    description: "Timeless royal heirloom — deep violet raw silk angrakha-cut anarkali kurta embellished with shimmering silver zari booti work, paired with a silver border-edged palazzo and dupatta.",
+    description:
+      "Timeless royal heirloom — deep violet raw silk angrakha-cut anarkali kurta embellished with shimmering silver zari booti work, paired with a silver border-edged palazzo and dupatta.",
     care: "Dry clean only.",
     fit: "A-line flared kurta; true to size.",
   },
@@ -298,7 +314,8 @@ export const products: Product[] = [
     badge: "Bestseller",
     rating: 4.9,
     reviewCount: 142,
-    description: "Romantic and breezy — tiered sunlit maxi dress with balloon sleeves, an open V-neckline, and subtle floral shadow stripes crafted for slow vacations and seaside getaways.",
+    description:
+      "Romantic and breezy — tiered sunlit maxi dress with balloon sleeves, an open V-neckline, and subtle floral shadow stripes crafted for slow vacations and seaside getaways.",
     care: "Gentle machine wash cold. Line dry in shade.",
     fit: "Fluid, tiered drape; true to size.",
   },
@@ -321,7 +338,8 @@ export const products: Product[] = [
     badge: "Limited Edition",
     rating: 4.7,
     reviewCount: 31,
-    description: "Majestic floor-sweeping silhouette — woven gold jacquard kaftan with an intricately embroidered rose-pink yoke, pearl-bead tassel fringe on bell sleeves, and dramatic side slits.",
+    description:
+      "Majestic floor-sweeping silhouette — woven gold jacquard kaftan with an intricately embroidered rose-pink yoke, pearl-bead tassel fringe on bell sleeves, and dramatic side slits.",
     care: "Dry clean only.",
     fit: "Graceful relaxed kaftan cut; fits XS through XL comfortably.",
   },
@@ -344,7 +362,8 @@ export const products: Product[] = [
     badge: "New",
     rating: 4.8,
     reviewCount: 44,
-    description: "Serene and refined — straight-cut chanderi tunic with mandarin collar and delicate tone-on-tone resham embroidery, paired with cigarette trousers and an artisanal scalloped cutwork dupatta.",
+    description:
+      "Serene and refined — straight-cut chanderi tunic with mandarin collar and delicate tone-on-tone resham embroidery, paired with cigarette trousers and an artisanal scalloped cutwork dupatta.",
     care: "Dry clean recommended.",
     fit: "Tailored straight fit; true to size.",
   },
@@ -368,7 +387,8 @@ export const products: Product[] = [
     badge: "Sale",
     rating: 4.7,
     reviewCount: 63,
-    description: "Vibrant celebratory palette — lustrous golden-mustard raw silk A-line kurta featuring bold rani-pink and tangerine contrast hem accents, finished with matching flared palazzo pants.",
+    description:
+      "Vibrant celebratory palette — lustrous golden-mustard raw silk A-line kurta featuring bold rani-pink and tangerine contrast hem accents, finished with matching flared palazzo pants.",
     care: "Dry clean only.",
     fit: "Relaxed A-line; true to size.",
   },
@@ -391,7 +411,8 @@ export const products: Product[] = [
     badge: "New",
     rating: 4.8,
     reviewCount: 29,
-    description: "Chic luxury — high-low cape poncho in pure ivory georgette with hand-embroidered fuchsia floral borders, paired with a draped satin tulip skirt designed for garden afternoon tea.",
+    description:
+      "Chic luxury — high-low cape poncho in pure ivory georgette with hand-embroidered fuchsia floral borders, paired with a draped satin tulip skirt designed for garden afternoon tea.",
     care: "Dry clean only.",
     fit: "Flowing cape overlay with draped wrap tulip skirt.",
   },
@@ -416,7 +437,8 @@ export const products: Product[] = [
     badge: "Sale",
     rating: 4.9,
     reviewCount: 88,
-    description: "Tailored directly from the hand-curated fabric rolls at our Baani City Centre boutique in Gurugram — breathable, sustainable pure linen cut for effortless all-day polish.",
+    description:
+      "Tailored directly from the hand-curated fabric rolls at our Baani City Centre boutique in Gurugram — breathable, sustainable pure linen cut for effortless all-day polish.",
     care: "Machine wash gentle cold. Iron slightly damp.",
     fit: "Relaxed tailored fit.",
   },
@@ -426,7 +448,8 @@ export const getProduct = (slug: string) => products.find((p) => p.slug === slug
 export const getCollection = (slug: string) => collections.find((c) => c.slug === slug);
 export const productsInCollection = (slug: string) => {
   if (slug === "new-arrivals") return products.filter((p) => p.badge === "New");
-  if (slug === "best-sellers") return products.filter((p) => p.badge === "Bestseller" || p.rating >= 4.8);
+  if (slug === "best-sellers")
+    return products.filter((p) => p.badge === "Bestseller" || p.rating >= 4.8);
   if (slug === "sale") return products.filter((p) => p.compareAtPrice);
   return products.filter((p) => p.categorySlugs.includes(slug));
 };

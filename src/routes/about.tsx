@@ -31,10 +31,12 @@ function AboutPage() {
           <span className="font-medium tracking-wide">The Atelier Journey</span>
         </div>
         <h1 className="display-1 text-4xl sm:text-6xl text-foreground">
-          Crafting Heirlooms for Your <em className="italic font-normal text-rose-deep">Most Beautiful</em> Moments
+          Crafting Heirlooms for Your{" "}
+          <em className="italic font-normal text-rose-deep">Most Beautiful</em> Moments
         </h1>
         <p className="mt-6 text-base text-cocoa leading-relaxed font-light">
-          Founded with an obsession for artisanal Indian textiles, ethereal twirls, and intimate boutique tailoring. Welcome to the world of Aidah The Label.
+          Founded with an obsession for artisanal Indian textiles, ethereal twirls, and intimate
+          boutique tailoring. Welcome to the world of Aidah The Label.
         </p>
       </div>
 
@@ -44,10 +46,18 @@ function AboutPage() {
           <img src={heroImg} alt="Aidah atelier flatlay" className="h-80 w-full object-cover" />
         </div>
         <div className="overflow-hidden rounded-3xl border border-gold/20 shadow-md">
-          <img src={ethnicImg} alt="Gulabi Bagh twirling lehenga" className="h-80 w-full object-cover" />
+          <img
+            src={ethnicImg}
+            alt="Gulabi Bagh twirling lehenga"
+            className="h-80 w-full object-cover"
+          />
         </div>
         <div className="overflow-hidden rounded-3xl border border-gold/20 shadow-md sm:col-span-2 lg:col-span-1">
-          <img src={editorialImg} alt="Aidah editorial drape" className="h-80 w-full object-cover" />
+          <img
+            src={editorialImg}
+            alt="Aidah editorial drape"
+            className="h-80 w-full object-cover"
+          />
         </div>
       </div>
 
@@ -57,10 +67,15 @@ function AboutPage() {
           <p className="eyebrow text-gold">The Philosophy</p>
           <h2 className="display-2 mt-2 text-3xl sm:text-4xl">Slow Fashion, Made with Soul</h2>
           <p className="mt-5 text-sm sm:text-base leading-relaxed text-cocoa">
-            At <strong>Aidah The Label</strong>, we discard the rush of fast fashion. Every single silhouette is designed in-house at our atelier and crafted in limited micro-batches by skilled generational artisans.
+            At <strong>Aidah The Label</strong>, we discard the rush of fast fashion. Every single
+            silhouette is designed in-house at our atelier and crafted in limited micro-batches by
+            skilled generational artisans.
           </p>
           <p className="mt-4 text-sm sm:text-base leading-relaxed text-cocoa">
-            We work exclusively with pure, breathable, and opulent natural textiles — handloom cotton Ikat, pure silk organza, featherweight mulmul, and certified European flax linen. Each piece is finished with French seams, hand-sewn booti tassels, and soft cotton linings that feel divine against the skin.
+            We work exclusively with pure, breathable, and opulent natural textiles — handloom
+            cotton Ikat, pure silk organza, featherweight mulmul, and certified European flax linen.
+            Each piece is finished with French seams, hand-sewn booti tassels, and soft cotton
+            linings that feel divine against the skin.
           </p>
         </div>
 
@@ -70,7 +85,8 @@ function AboutPage() {
             <div>
               <h3 className="font-display text-xl text-foreground">Zero Compromise on Quality</h3>
               <p className="mt-1 text-xs text-cocoa leading-relaxed">
-                We believe couture should feel as gentle and comfortable as it looks grand. We refuse synthetic linings or scratchy nets.
+                We believe couture should feel as gentle and comfortable as it looks grand. We
+                refuse synthetic linings or scratchy nets.
               </p>
             </div>
           </div>
@@ -79,7 +95,8 @@ function AboutPage() {
             <div>
               <h3 className="font-display text-xl text-foreground">Bespoke Fit for Every Woman</h3>
               <p className="mt-1 text-xs text-cocoa leading-relaxed">
-                Every woman deserves clothes that celebrate her unique form. We provide personalized made-to-measure alterations for all patron orders.
+                Every woman deserves clothes that celebrate her unique form. We provide personalized
+                made-to-measure alterations for all patron orders.
               </p>
             </div>
           </div>
@@ -88,7 +105,8 @@ function AboutPage() {
             <div>
               <h3 className="font-display text-xl text-foreground">Visit Our Gurugram Atelier</h3>
               <p className="mt-1 text-xs text-cocoa leading-relaxed">
-                Step inside our flagship boutique at Baani City Centre, Sector 63, Gurugram. Touch the fabrics, meet our stylists, and feel the luxury in person.
+                Step inside our flagship boutique at Baani City Centre, Sector 63, Gurugram. Touch
+                the fabrics, meet our stylists, and feel the luxury in person.
               </p>
             </div>
           </div>
@@ -98,9 +116,12 @@ function AboutPage() {
       {/* Boutique Details Banner */}
       <div className="mt-20 rounded-[2.5rem] bg-cream/70 border border-gold/30 p-8 sm:p-14 text-center">
         <p className="eyebrow text-gold">Physical Boutique &amp; Design Studio</p>
-        <h2 className="display-2 mt-2 text-2xl sm:text-4xl text-foreground">Baani City Centre, Sector 63, Gurugram</h2>
+        <h2 className="display-2 mt-2 text-2xl sm:text-4xl text-foreground">
+          Baani City Centre, Sector 63, Gurugram
+        </h2>
         <p className="mx-auto mt-4 max-w-xl text-sm text-cocoa">
-          We invite you to experience personalized bridal consultations, trousseau styling, and custom fitting sessions at our studio.
+          We invite you to experience personalized bridal consultations, trousseau styling, and
+          custom fitting sessions at our studio.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           <Link

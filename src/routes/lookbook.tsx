@@ -11,7 +11,8 @@ export const Route = createFileRoute("/lookbook")({
       { title: "Runway & Lookbook — AIDAH The Label | Gurugram" },
       {
         name: "description",
-        content: "Explore the Aidah The Label lookbook: dynamic runway video reels, liquid silks, bridal lehengas, and ethereal silhouettes in motion.",
+        content:
+          "Explore the Aidah The Label lookbook: dynamic runway video reels, liquid silks, bridal lehengas, and ethereal silhouettes in motion.",
       },
       { property: "og:title", content: "Runway & Lookbook — AIDAH The Label" },
       { property: "og:image", content: "/logo.jpg" },
@@ -21,18 +22,64 @@ export const Route = createFileRoute("/lookbook")({
 });
 
 const videoReels = [
-  { src: "/media/reels/reel-1.mp4", title: "The Twirl of Gulabi Bagh", subtitle: "Handcrafted Silk Organza Lehenga" },
-  { src: "/media/reels/reel-2.mp4", title: "Liquid Satin Drape", subtitle: "The Seraphina Saree Gown" },
-  { src: "/media/reels/reel-3.mp4", title: "Camille Summer Maxi", subtitle: "Pure Mulmul & Shadow Floral Print" },
-  { src: "/media/reels/reel-4.mp4", title: "Valeria Cape & Dhoti Set", subtitle: "Ice-Blue Festive Occasion Wear" },
-  { src: "/media/reels/reel-5.mp4", title: "Atelier Fitting Session", subtitle: "Baani City Centre Studio" },
+  {
+    src: "/media/reels/reel-1.mp4",
+    title: "The Twirl of Gulabi Bagh",
+    subtitle: "Handcrafted Silk Organza Lehenga",
+  },
+  {
+    src: "/media/reels/reel-2.mp4",
+    title: "Liquid Satin Drape",
+    subtitle: "The Seraphina Saree Gown",
+  },
+  {
+    src: "/media/reels/reel-3.mp4",
+    title: "Camille Summer Maxi",
+    subtitle: "Pure Mulmul & Shadow Floral Print",
+  },
+  {
+    src: "/media/reels/reel-4.mp4",
+    title: "Valeria Cape & Dhoti Set",
+    subtitle: "Ice-Blue Festive Occasion Wear",
+  },
+  {
+    src: "/media/reels/reel-5.mp4",
+    title: "Atelier Fitting Session",
+    subtitle: "Baani City Centre Studio",
+  },
+  {
+    src: "/media/reels/reel-6.mp4",
+    title: "Ophelia Festive Kaftan",
+    subtitle: "Metallic Gold Tissue & Scalloped Zari",
+  },
+  {
+    src: "/media/reels/reel-7.mp4",
+    title: "Handloom Luxury Linen",
+    subtitle: "Pure Artisan Weaves & Silhouettes",
+  },
 ];
 
 const editorialShots = [
-  { img: ethnicImg, title: "The Royal Flora Lehenga", caption: "Resham and Zari Booti with scalloped organza border" },
-  { img: heroImg, title: "Noor Peach Chikankari Kurta", caption: "Pure organza with artisanal needle lace craft" },
-  { img: editorialImg, title: "Valeria Cape Ensemble", caption: "Structured drape with liquid silk dhoti pants" },
-  { img: floralImg, title: "Camille Tiered Maxi", caption: "Breezy tiered silhouette designed for resort evenings" },
+  {
+    img: ethnicImg,
+    title: "The Royal Flora Lehenga",
+    caption: "Resham and Zari Booti with scalloped organza border",
+  },
+  {
+    img: heroImg,
+    title: "Noor Peach Chikankari Kurta",
+    caption: "Pure organza with artisanal needle lace craft",
+  },
+  {
+    img: editorialImg,
+    title: "Valeria Cape Ensemble",
+    caption: "Structured drape with liquid silk dhoti pants",
+  },
+  {
+    img: floralImg,
+    title: "Camille Tiered Maxi",
+    caption: "Breezy tiered silhouette designed for resort evenings",
+  },
 ];
 
 function LookbookPage() {
@@ -45,7 +92,8 @@ function LookbookPage() {
           Runway in <em className="italic font-normal text-rose-deep">Motion</em>
         </h1>
         <p className="mt-4 text-sm sm:text-base text-cocoa leading-relaxed font-light">
-          Silhouettes designed not just to be admired, but to be moved in. Watch our couture collections twirl, flow, and drape in live motion.
+          Silhouettes designed not just to be admired, but to be moved in. Watch our couture
+          collections twirl, flow, and drape in live motion.
         </p>
       </div>
 
@@ -53,11 +101,16 @@ function LookbookPage() {
       <div className="mt-16">
         <div className="flex items-center gap-2 mb-6 text-gold">
           <Play className="h-4 w-4 fill-gold" />
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-charcoal">Runway Video Reels</h2>
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-charcoal">
+            Runway Video Reels
+          </h2>
         </div>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
           {videoReels.map((reel, idx) => (
-            <div key={idx} className="group relative overflow-hidden rounded-3xl border border-border bg-charcoal shadow-lg">
+            <div
+              key={idx}
+              className="group relative overflow-hidden rounded-3xl border border-border bg-charcoal shadow-lg"
+            >
               <div className="aspect-[9/16] w-full overflow-hidden">
                 <video
                   src={reel.src}
@@ -84,7 +137,10 @@ function LookbookPage() {
         <h2 className="display-2 text-3xl sm:text-4xl">Campaign Photography</h2>
         <div className="mt-8 grid gap-6 sm:grid-cols-2">
           {editorialShots.map((shot, idx) => (
-            <div key={idx} className="group relative overflow-hidden rounded-3xl border border-gold/20 shadow-xl">
+            <div
+              key={idx}
+              className="group relative overflow-hidden rounded-3xl border border-gold/20 shadow-xl"
+            >
               <img
                 src={shot.img}
                 alt={shot.title}

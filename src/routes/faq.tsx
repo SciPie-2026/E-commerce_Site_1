@@ -6,7 +6,11 @@ export const Route = createFileRoute("/faq")({
   head: () => ({
     meta: [
       { title: "Boutique FAQ — AIDAH The Label" },
-      { name: "description", content: "Frequently asked questions regarding bespoke sizing, orders, craftsmanship, and atelier visits." },
+      {
+        name: "description",
+        content:
+          "Frequently asked questions regarding bespoke sizing, orders, craftsmanship, and atelier visits.",
+      },
     ],
   }),
   component: FAQPage,
@@ -46,13 +50,20 @@ function FAQPage() {
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="text-center">
         <p className="eyebrow text-gold">Help &amp; Concierge</p>
-        <h1 className="display-1 mt-2 text-3xl sm:text-5xl text-foreground">Frequently Asked Questions</h1>
-        <p className="mt-4 text-sm text-cocoa">Everything you need to know about shopping with Aidah The Label.</p>
+        <h1 className="display-1 mt-2 text-3xl sm:text-5xl text-foreground">
+          Frequently Asked Questions
+        </h1>
+        <p className="mt-4 text-sm text-cocoa">
+          Everything you need to know about shopping with Aidah The Label.
+        </p>
       </div>
 
       <div className="mt-12 space-y-4">
         {faqs.map((faq, idx) => (
-          <div key={idx} className="rounded-2xl border border-border bg-card overflow-hidden shadow-xs">
+          <div
+            key={idx}
+            className="rounded-2xl border border-border bg-card overflow-hidden shadow-xs"
+          >
             <button
               onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
               className="w-full p-5 text-left flex justify-between items-center gap-4 transition-colors hover:bg-secondary/40"
@@ -73,7 +84,9 @@ function FAQPage() {
 
       <div className="mt-16 rounded-3xl bg-cream/70 border border-gold/30 p-8 text-center">
         <h2 className="font-display text-xl text-foreground">Still have questions?</h2>
-        <p className="mt-2 text-xs text-cocoa">Our Gurugram concierge is available Mon–Sat from 11am to 7pm IST.</p>
+        <p className="mt-2 text-xs text-cocoa">
+          Our Gurugram concierge is available Mon–Sat from 11am to 7pm IST.
+        </p>
         <div className="mt-6 flex justify-center gap-4">
           <Link
             to={"/contact" as any}

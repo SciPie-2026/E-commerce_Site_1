@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -13,8 +14,10 @@ import type { ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { CartProvider } from "@/lib/cart-context";
 import { WishlistProvider } from "@/lib/wishlist-context";
+import { AuthProvider } from "@/lib/auth-context";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
+import { Toaster } from "sonner";
 
 function NotFoundComponent() {
   return (
@@ -77,9 +80,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "AIDAH The Label — Designer House & Boutique | Gurugram" },
-      { name: "description", content: "Aidah The Label — Designer House & Boutique at Baani City Centre, Sector 63, Gurugram. Handcrafted lehengas, pure linen co-ords, and luxury occasion wear." },
+      {
+        name: "description",
+        content:
+          "Aidah The Label — Designer House & Boutique at Baani City Centre, Sector 63, Gurugram. Handcrafted lehengas, pure linen co-ords, and luxury occasion wear.",
+      },
       { property: "og:title", content: "AIDAH The Label — Designer House & Boutique" },
-      { property: "og:description", content: "Handcrafted lehengas, pure linen co-ords, and luxury occasion wear hand-finished at our Gurugram atelier." },
+      {
+        property: "og:description",
+        content:
+          "Handcrafted lehengas, pure linen co-ords, and luxury occasion wear hand-finished at our Gurugram atelier.",
+      },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "/logo.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -92,7 +103,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap",
       },
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/logo.jpg", type: "image/jpeg" },
+      { rel: "icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "icon", href: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { rel: "icon", href: "/favicon.png", type: "image/png", sizes: "192x192" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
   }),
   shellComponent: RootShell,
@@ -117,21 +131,26 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const routerState = useRouterState();
+  const isAdminRoute = routerState.location.pathname.startsWith("/admin");
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <WishlistProvider>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">
-              {/* Nested routes render here. */}
-              <Outlet />
-            </main>
-            <Footer />
-          </div>
-        </WishlistProvider>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <WishlistProvider>
+            <div className="flex min-h-screen flex-col">
+              {!isAdminRoute && <Header />}
+              <main className="flex-1">
+                {/* Nested routes render here. */}
+                <Outlet />
+              </main>
+              {!isAdminRoute && <Footer />}
+            </div>
+            <Toaster position="top-right" richColors />
+          </WishlistProvider>
+        </CartProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

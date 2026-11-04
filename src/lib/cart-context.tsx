@@ -59,9 +59,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           const existing = prev.find((l) => l.key === key);
           if (existing) {
             return prev.map((l) =>
-              l.key === key
-                ? { ...l, qty: Math.min(l.qty + line.qty, l.maxQty) }
-                : l
+              l.key === key ? { ...l, qty: Math.min(l.qty + line.qty, l.maxQty) } : l,
             );
           }
           return [...prev, { ...line, key }];
@@ -70,8 +68,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setQty: (key, qty) =>
         setLines((prev) =>
           prev.map((l) =>
-            l.key === key ? { ...l, qty: Math.max(1, Math.min(qty, l.maxQty)) } : l
-          )
+            l.key === key ? { ...l, qty: Math.max(1, Math.min(qty, l.maxQty)) } : l,
+          ),
         ),
       clear: () => setLines([]),
     };
