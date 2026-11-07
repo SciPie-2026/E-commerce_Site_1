@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Heart, Search, ShoppingBag, Menu, X, ChevronDown, User } from "lucide-react";
+import { Heart, Search, ShoppingBag, Menu, X, ChevronDown, User, LogOut, ShieldCheck } from "lucide-react";
 import { collections, logoImg } from "@/data/catalog";
 import { useCart } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
@@ -14,7 +14,7 @@ const mainNav = [
 ] as const;
 
 export function Header() {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, logout } = useAuth();
   const { count } = useCart();
   const { slugs: wishlist } = useWishlist();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -159,18 +159,38 @@ export function Header() {
                 </span>
               )}
             </Link>
-            <Link
-              to={(user ? "/account" : "/login") as any}
-              aria-label={user ? "Atelier Account" : "Sign In"}
-              className="relative transition-colors hover:text-rose-deep flex items-center gap-1.5"
-            >
-              <User className="h-5 w-5" strokeWidth={1.5} />
-              {isAdmin && (
-                <span className="hidden sm:inline-flex rounded-full bg-gold/15 px-2 py-0.5 text-[0.65rem] font-medium text-gold border border-gold/30">
-                  Admin
-                </span>
-              )}
-            </Link>
+            {/* Account & Sign In - Desktop */}
+            {user ? (
+              <div className="flex items-center gap-2">
+                <Link
+                  to="/account"
+                  className="group flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/5 px-3 py-1.5 text-xs font-medium text-foreground transition-all hover:bg-gold/15 hover:border-gold"
+                  aria-label="Atelier Customer Account"
+                >
+                  <User className="h-3.5 w-3.5 text-gold" strokeWidth={2} />
+                  <span className="hidden sm:inline max-w-[100px] truncate">
+                    {user.name ? user.name.split(" ")[0] : "Account"}
+                  </span>
+                </Link>
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    className="hidden xl:inline-flex rounded-full bg-charcoal px-2.5 py-1 text-[0.65rem] font-semibold text-gold tracking-wider uppercase border border-gold/40 hover:bg-rose-deep transition-colors"
+                  >
+                    Admin
+                  </Link>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="group flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-foreground transition-all hover:border-gold hover:text-rose-deep"
+                aria-label="Sign In to Atelier Account"
+              >
+                <User className="h-3.5 w-3.5 text-gold" strokeWidth={2} />
+                <span className="hidden sm:inline font-sans tracking-wide">Sign In</span>
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -182,7 +202,7 @@ export function Header() {
             className="absolute inset-0 bg-charcoal/30 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="animate-fade-up absolute inset-y-0 left-0 flex w-80 max-w-[85vw] flex-col bg-background p-6 shadow-2xl">
+          <div className="animate-fade-up absolute inset-y-0 left-0 flex w-80 max-w-[85vw] flex-col overflow-y-auto bg-background p-6 shadow-2xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <img
@@ -205,11 +225,13 @@ export function Header() {
                 <X className="h-5 w-5" strokeWidth={1.5} />
               </button>
             </div>
-            <nav className="mt-8 flex flex-col gap-1" aria-label="Mobile">
+
+            {/* Mobile Navigation Links */}
+            <nav className="mt-6 flex flex-col gap-1" aria-label="Mobile">
               {mainNav.map((item) => (
                 <button
                   key={item.label}
-                  className="py-3 text-left font-display text-2xl transition-colors hover:text-rose-deep"
+                  className="py-2.5 text-left font-display text-xl transition-colors hover:text-rose-deep"
                   onClick={() => {
                     setMobileOpen(false);
                     navigate({ to: item.to as any });
@@ -218,12 +240,13 @@ export function Header() {
                   {item.label}
                 </button>
               ))}
-              <p className="eyebrow mt-6 text-muted-foreground">Collections</p>
-              <div className="mt-2 flex flex-col">
-                {collections.slice(0, 10).map((c) => (
+
+              <p className="eyebrow mt-4 text-muted-foreground">Collections</p>
+              <div className="mt-1 flex flex-col">
+                {collections.slice(0, 8).map((c) => (
                   <button
                     key={c.slug}
-                    className="py-2 text-left text-[0.95rem] text-cocoa transition-colors hover:text-rose-deep"
+                    className="py-1.5 text-left text-[0.9rem] text-cocoa transition-colors hover:text-rose-deep"
                     onClick={() => {
                       setMobileOpen(false);
                       navigate({
@@ -237,9 +260,79 @@ export function Header() {
                 ))}
               </div>
             </nav>
-          </div>
-        </div>
-      )}
+
+            {/* Mobile Patron & Account Suite */}
+            <div className="mt-6 border-t border-border pt-5">
+              <p className="eyebrow text-gold">Atelier Patron Portal</p>
+              {user ? (
+                <div className="mt-3 space-y-2">
+                  <div className="rounded-2xl border border-gold/30 bg-gold/5 p-3">
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                      <ShieldCheck className="h-3.5 w-3.5 text-gold" />
+                      <span>{user.name}</span>
+                    </div>
+                    <p className="text-[0.7rem] text-muted-foreground truncate mt-0.5">{user.email}</p>
+                  </div>
+                  <button
+                    className="flex w-full items-center justify-between rounded-xl py-2 text-left text-sm font-medium text-foreground hover:text-rose-deep"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      navigate({ to: "/account" });
+                    }}
+                  >
+                    <span>My Account &amp; Orders</span>
+                    <span className="text-gold">→</span>
+                  </button>
+                  {isAdmin && (
+                    <button
+                      className="flex w-full items-center justify-between rounded-xl py-2 text-left text-sm font-medium text-gold hover:text-rose-deep"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        navigate({ to: "/admin" });
+                      }}
+                    >
+                      <span>Executive Admin Suite</span>
+                      <span className="text-gold">✦</span>
+                    </button>
+                  )}
+                  <button
+                    className="flex w-full items-center gap-2 pt-2 text-left text-xs text-muted-foreground hover:text-rose-deep border-t border-border/50"
+                    onClick={async () => {
+                      setMobileOpen(false);
+                      await logout();
+                      navigate({ to: "/" });
+                    }}
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-3 space-y-2">
+                  <button
+                    className="w-full rounded-full bg-charcoal px-4 py-2.5 text-center text-xs font-semibold uppercase tracking-wider text-ivory hover:bg-rose-deep transition-colors shadow-sm"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      navigate({ to: "/login" });
+                    }}
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    className="w-full rounded-full border border-border px-4 py-2.5 text-center text-xs font-semibold uppercase tracking-wider text-foreground hover:border-gold hover:text-rose-deep transition-colors"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      navigate({ to: "/register" });
+                    }}
+                  >
+                    Create Account
+                  </button>
+                  <p className="text-center text-[0.68rem] text-muted-foreground pt-1">
+                    An account is required to place and track atelier orders
+                  </p>
+                </div>
+              )}
+            </div>
     </header>
   );
 }

@@ -106,6 +106,22 @@ export function Footer() {
             </li>
             <li>
               <Link
+                to={"/login" as any}
+                className="font-medium text-foreground transition-colors hover:text-rose-deep"
+              >
+                Sign In / Register
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/account" as any}
+                className="text-cocoa transition-colors hover:text-rose-deep"
+              >
+                My Account &amp; Orders
+              </Link>
+            </li>
+            <li>
+              <Link
                 to={"/contact" as any}
                 className="text-cocoa transition-colors hover:text-rose-deep"
               >
@@ -149,6 +165,16 @@ export function Footer() {
             </li>
           </ul>
           <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+            <li>
+              <Link to="/login" className="font-semibold text-gold hover:underline">
+                Client Portal / Sign In
+              </Link>
+            </li>
+            <li>
+              <Link to="/account" className="hover:underline">
+                My Account
+              </Link>
+            </li>
             <li>
               <Link to={"/shipping-policy" as any} className="hover:underline">
                 Shipping

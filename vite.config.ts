@@ -10,31 +10,37 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export default defineConfig(({ command }) => ({
-  server: {
-    host: true,
-    port: 8080,
-  },
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
+export default defineConfig(({ command }) => {
+  const nitroPreset = process.env.VERCEL
+    ? "vercel"
+    : process.env.NITRO_PRESET || "cloudflare-module";
+
+  return {
+    server: {
+      host: true,
+      port: 8080,
     },
-    dedupe: [
-      "react",
-      "react-dom",
-      "react/jsx-runtime",
-      "react/jsx-dev-runtime",
-      "@tanstack/react-query",
-      "@tanstack/query-core",
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+      dedupe: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
+        "@tanstack/react-query",
+        "@tanstack/query-core",
+      ],
+    },
+    plugins: [
+      tanstackStart({
+        server: { entry: "server" },
+      }),
+      tailwindcss(),
+      tsConfigPaths({ projects: ["./tsconfig.json"] }),
+      viteReact(),
+      ...(command === "build" ? [nitro({ defaultPreset: nitroPreset })] : []),
     ],
-  },
-  plugins: [
-    tanstackStart({
-      server: { entry: "server" },
-    }),
-    tailwindcss(),
-    tsConfigPaths({ projects: ["./tsconfig.json"] }),
-    viteReact(),
-    ...(command === "build" ? [nitro({ defaultPreset: "cloudflare-module" })] : []),
-  ],
-}));
+  };
+});
