@@ -378,7 +378,12 @@ export const createOrderFn = createServerFn({ method: "POST" })
   .validator((data: unknown) => CreateOrderInputSchema.parse(data))
   .handler(async ({ data }) => {
     const auth = await getCurrentUserFn();
-    return processCreateOrder(data, getSafeRequestIP(), auth?.user?.id || null);
+    if (!auth?.user?.id) {
+      throw new Error(
+        "Authentication required: You must be signed in to an AIDAH account to place an order.",
+      );
+    }
+    return processCreateOrder(data, getSafeRequestIP(), auth.user.id);
   });
 
 export const verifyPaymentFn = createServerFn({ method: "POST" })

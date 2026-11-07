@@ -66,7 +66,6 @@ function CartPage() {
   // Customer Checkout Modals & Auth State
   const [showAuthPromptModal, setShowAuthPromptModal] = useState(false);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
-  const [isGuestCheckout, setIsGuestCheckout] = useState(false);
 
   // Auth Modal Tab: "login" or "register"
   const [authTab, setAuthTab] = useState<"login" | "register">("login");
@@ -161,8 +160,8 @@ function CartPage() {
 
   const handleStartCheckout = () => {
     if (lines.length === 0) return;
-    // Prompt login/registration if user is not authenticated and hasn't explicitly chosen guest mode
-    if (!user && !isGuestCheckout) {
+    // An authenticated account is strictly required to complete checkout
+    if (!user) {
       setShowAuthPromptModal(true);
       return;
     }
@@ -235,6 +234,13 @@ function CartPage() {
 
   const handleConfirmOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!user) {
+      toast.error("An authenticated account is required to place an order. Please sign in or register.");
+      setShowCheckoutModal(false);
+      setShowAuthPromptModal(true);
+      return;
+    }
 
     // Client-side address validation to provide instant feedback
     if (!custName.trim() || custName.trim().length < 2) {
@@ -744,26 +750,9 @@ function CartPage() {
               </form>
             )}
 
-            <div className="relative flex py-1 items-center">
-              <div className="flex-grow border-t border-border"></div>
-              <span className="flex-shrink mx-3 text-[0.7rem] uppercase tracking-wider text-muted-foreground font-medium">
-                or
-              </span>
-              <div className="flex-grow border-t border-border"></div>
-            </div>
-
-            {/* Guest Checkout Option */}
-            <button
-              type="button"
-              onClick={() => {
-                setIsGuestCheckout(true);
-                setShowAuthPromptModal(false);
-                setShowCheckoutModal(true);
-              }}
-              className="w-full text-center text-xs text-muted-foreground hover:text-foreground underline decoration-muted-foreground/40 transition-colors py-1"
-            >
-              Continue as Guest Checkout (without saving account) →
-            </button>
+            <p className="text-center text-[0.72rem] text-muted-foreground pt-1 border-t border-border/50">
+              An authenticated account is required for bespoke atelier fittings, order tracking, and receipt delivery.
+            </p>
           </div>
         </div>
       )}
@@ -787,8 +776,8 @@ function CartPage() {
               </button>
             </div>
 
-            {/* Member vs Guest status indicator */}
-            {user ? (
+            {/* Verified Member status indicator */}
+            {user && (
               <div className="flex items-center justify-between rounded-2xl border border-gold/30 bg-gold/5 px-4 py-2.5 text-xs">
                 <div className="flex items-center gap-2 text-foreground">
                   <ShieldCheck className="h-4 w-4 text-gold shrink-0" />
@@ -797,22 +786,8 @@ function CartPage() {
                   </span>
                 </div>
                 <span className="rounded-full bg-gold/20 px-2.5 py-0.5 text-[0.65rem] font-bold text-gold uppercase tracking-wider">
-                  Verified
+                  Verified Patron
                 </span>
-              </div>
-            ) : (
-              <div className="flex items-center justify-between rounded-2xl border border-amber-500/30 bg-amber-500/5 px-4 py-2.5 text-xs text-cocoa">
-                <span>Guest Checkout Mode (No account linked)</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowCheckoutModal(false);
-                    setShowAuthPromptModal(true);
-                  }}
-                  className="text-gold font-semibold hover:underline text-xs"
-                >
-                  Sign In instead
-                </button>
               </div>
             )}
 
